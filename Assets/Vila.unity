@@ -756,9 +756,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1381833171}
   - component: {fileID: 1381833170}
-  - component: {fileID: 1381833169}
   - component: {fileID: 1381833173}
   - component: {fileID: 1381833172}
+  - component: {fileID: 1381833169}
   m_Layer: 0
   m_Name: d3k0jaq-187b9f31-f54f-47da-b3d2-5fb9ed407b9c
   m_TagString: Untagged
@@ -775,12 +775,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1381833168}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93e40601d29ae5c4c91b76ff8e28da51, type: 3}
+  m_Script: {fileID: 11500000, guid: a4dab56033ec5e547ab82c1e9cf2be9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 3
   targetPosition: {x: 0, y: 0, z: 0}
-  gamemanager: {fileID: 1976474313}
+  gamemanager: {fileID: 0}
   lugares: []
   Age: 75
   Humor: 25
