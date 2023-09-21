@@ -88,8 +88,7 @@ public class Character : MonoBehaviour
         Debug.Log("Chegou");
     }
 
-   public void Interagir()
-   {
+   public void Interagir(){
 
 
 
