@@ -27,6 +27,7 @@ public class Character : MonoBehaviour
 
     private void Start()
     {
+       gamemanager = GameObject.FindGameObjectWithTag("Horario");
         timer = gamemanager.GetComponent<Timer>();
         lugares = timer.Lugares;
 

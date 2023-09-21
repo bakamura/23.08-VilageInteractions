@@ -15,7 +15,7 @@ public class Timer : MonoBehaviour
     public List<GameObject> Characters = new List<GameObject>();
 
     void Awake(){
-        horario.text = "10h";
+        horario.text = "Começa o dia";
         periodo = -1;
         Chars = GameObject.FindGameObjectsWithTag("Char");
         Characters.AddRange(Chars); 
@@ -52,17 +52,13 @@ public class Timer : MonoBehaviour
 
      public int GetCurrentPeriod()
     {
-        // Implement your logic to determine the current period here.
-        // You might want to use real-time or game time to calculate the period.
-        // For this example, let's use a simple time-based calculation.
+       
+        float currentTimeInSeconds = Time.time;
+        float periodDurationInSeconds = 120.0f; 
 
-        float currentTimeInSeconds = Time.time; // Get the current time in seconds.
-        float periodDurationInSeconds = 120.0f; // Duration of each period (2 minutes).
-
-        // Calculate the current period.
+ 
         int currentPeriod = Mathf.FloorToInt(currentTimeInSeconds / periodDurationInSeconds);
 
-        // Return the current period.
         return currentPeriod;
     }
 }
