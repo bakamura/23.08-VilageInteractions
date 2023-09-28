@@ -522,15 +522,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1300541475}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93e40601d29ae5c4c91b76ff8e28da51, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f593c4bde721444693f4792dda54480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 3
-  targetPosition: {x: 0, y: 0, z: 0}
-  gamemanager: {fileID: 1976474313}
-  lugares: []
+  moveSpeed: 0.5
   Age: 90
-  Humor: 0
+  humor: 0
   gender: 0
   money: 0
   persona: 0
