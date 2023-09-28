@@ -13,6 +13,7 @@ public class Char_Icognito : CharBase {
         Neutral
     }
     private int _charInteractedToday;
+    [SerializeField] private float _trueHumor; // Serializefor visibility
 
     [Header("Movement")]
 
@@ -36,7 +37,7 @@ public class Char_Icognito : CharBase {
     private void Update() {
         switch (_timeManager.periodo) {
             case 0:
-                _interactionTypeCurrent = humor > 0.5f ? InteractionType.Hurt : InteractionType.Heal;
+                _interactionTypeCurrent = _trueHumor > 0.5f ? InteractionType.Hurt : InteractionType.Heal;
                 break;
             case 1:
                 // Nothing
@@ -104,6 +105,13 @@ public class Char_Icognito : CharBase {
     }
 
     private void OnTriggerEnter(Collider other) {
+        gender = RandomizeGender(Random.Range(0, 3));
+        age = (uint)Random.Range(0, 100);
+        race = RandomizeRace(Random.Range(0, 4));
+        money = RandomizePurse(Random.Range(0, 3));
+        humor = Random.Range(0f, 1f);
+        persona = RandomizePersona(Random.Range(0, 6));
+
         _charInteractedToday++;
         if (_charInteractedToday == 4) _movementFollowTargetHurt = other.transform;
         else if (_charInteractedToday == 7) _movementFollowTargetHeal = other.transform;
@@ -119,6 +127,54 @@ public class Char_Icognito : CharBase {
             case InteractionType.Neutral:
                 
                 break;
+        }
+    }
+
+    private GenderT RandomizeGender(int i) {
+        switch(i % 3) {
+            case 0: return GenderT.Male;
+            case 1: return GenderT.Female;
+            case 2: return GenderT.Other;
+            default:
+                Debug.LogError("RandomGender: Somehow i % 3 != {0 ~ 2}");
+                return GenderT.Other;
+        }
+    }
+
+    private RaceT RandomizeRace(int i) {
+        switch (i % 4) {
+            case 0: return RaceT.Human;
+            case 1: return RaceT.Animal;
+            case 2: return RaceT.Spirit;
+            case 3: return RaceT.NonHuman;
+            default:
+                Debug.LogError("RandomRace: Somehow i % 4 != {0 ~ 3}");
+                return RaceT.NonHuman;
+        }
+    }
+
+    private MoneyT RandomizePurse(int i) {
+        switch (i % 3) {
+            case 0: return MoneyT.Rich;
+            case 1: return MoneyT.Medium;
+            case 2: return MoneyT.Poor;
+            default:
+                Debug.LogError("RandomPurse: Somehow i % 4 != {0 ~ 2}");
+                return MoneyT.Rich;
+        }
+    }
+
+    private PersonalityT RandomizePersona(int i) {
+        switch (i % 6) {
+            case 0: return PersonalityT.Sadistic;
+            case 1: return PersonalityT.Grumpy;
+            case 2: return PersonalityT.Loud;
+            case 3: return PersonalityT.Shy;
+            case 4: return PersonalityT.Kind;
+            case 5: return PersonalityT.Flirty;
+            default:
+                Debug.LogError("RandomPersona: Somehow i % 6 != {0 ~ 5}");
+                return PersonalityT.Sadistic;
         }
     }
 
