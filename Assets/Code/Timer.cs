@@ -18,21 +18,18 @@ public class Timer : MonoBehaviour
         horario.text = "Começa o dia";
         periodo = -1;
         Chars = GameObject.FindGameObjectsWithTag("Char");
-        Characters.AddRange(Chars);
-
-        if (positions.Count < 5)
-        {
-            foreach (GameObject obj in Lugares)
-            {
-                positions.Add(obj.transform.position);
-            }
-        }
-
+        Characters.AddRange(Chars); 
     }
     private void Update()
     {
         
         currentTime += Time.deltaTime;
+        if(positions.Count<5){
+        foreach (GameObject obj in Lugares)
+        {
+            positions.Add(obj.transform.position);
+        }
+        }
         // Print the positions to the console
        
         if (currentTime >= timeIntervalSeconds)
