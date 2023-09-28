@@ -15,7 +15,7 @@ public class Character_chris : MonoBehaviour
     public enum Gender { Male, Female, Neutro }
     public enum Money { Poor, Medium, Rich }
     public enum Persona { Grumpy, Shy, Kind, Flirty, Sado, Loud }
-    public enum Race { Dog, Elemental, Boto, Human }
+    public enum Race { Dog, Elemental, Boto, Human}
     public float Humor;
     public Gender gender;
     public Money money;
@@ -49,6 +49,12 @@ public class Character_chris : MonoBehaviour
     void Update()
     {
         transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+
+      if(targetPosition == GameObject.Find("Hospital").transform.position)
+        {
+            Humor = 0;
+            persona = Persona.Sado;
+        }
     }
 
     public void MudaLugar(int periodo)
@@ -82,6 +88,9 @@ public class Character_chris : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other){
 
         if(other.gameObject.tag == "Char"){
+
+            Relacoes(other.gameObject);
+
             Interagir();
             Debug.Log("Pegar Valores");
         }
@@ -90,13 +99,142 @@ public class Character_chris : MonoBehaviour
 
    public void Interagir(){
 
-        switch(Money)
-        {
-            case 1: 
+       
+    }
 
+    void Relacoes(GameObject other)
+    {
+
+        if (other.GetComponent<Character_chris>().Age > 40)
+        {
+            Humor++;
+        }
+        else if (other.GetComponent<Character_chris>().Age <= 40 && other.GetComponent<Character_chris>().Age < 100)
+        {
+            Humor--;
+        }
+        else
+        {
+            Humor = 0;
+        }
+        Debug.Log(other.GetComponent<Character_chris>().money);
+
+        switch (other.GetComponent<Character_chris>().money){
+
+
+            case Money.Poor:
+
+                Humor-= 2;
+
+               persona = Persona.Sado;
+                break;
+
+            case Money.Medium:
+
+                if (persona == Persona.Kind)
+                {
+                  
+                    other.GetComponent<Character_chris>().money = Money.Rich;
+                }
+                else if (persona == Persona.Grumpy || persona == Persona.Sado)
+                {
+                    Humor--;
+                    other.GetComponent<Character_chris>().money = Money.Poor;
+                    money = Money.Rich;
+                }
+                else
+                {
+                    Humor--;
+                    other.GetComponent<Character_chris>().money = Money.Poor;
+                    money = Money.Rich;
+                }
+                break;
+
+            case Money.Rich:
+                if (persona == Persona.Grumpy || persona == Persona.Sado)
+                {
+                    Humor--;
+                    other.GetComponent<Character_chris>().money = Money.Medium;
+                    money = Money.Rich;
+                }
+                else
+                {
+                    Humor += 2;
+                    persona = Persona.Kind;
+                }
+                break;
+        }
+
+
+        switch (other.GetComponent<Character_chris>().persona)
+        {
+
+
+            case Persona.Loud:
+
+                persona = Persona.Grumpy;
+
+                break;
+
+            case Persona.Shy:
+
+                persona = Persona.Sado;
+
+                break;
+
+            case Persona.Sado:
+
+                persona = Persona.Flirty;
+
+                break;
+
+            case Persona.Kind:
+
+                persona = Persona.Loud;
+                money = Money.Rich;
+
+                break;
+
+        }
+
+        if (money == Money.Poor)
+        {
+            other.GetComponent<Character_chris>().money = Money.Poor;
+            money = Money.Rich;
+            Humor = 0;
+        }
+
+        switch (other.GetComponent<Character_chris>().race)
+        {
+
+            case Race.Dog:
+
+                Humor++;
+
+                break;
+
+            case Race.Human:
+
+                if (persona == Persona.Grumpy || persona == Persona.Sado || persona == Persona.Loud)
+                {
+                    Humor--;
+                }else if (persona == Persona.Flirty)
+                {
+                    Humor++;
+                }
+
+                break;
+
+           
+
+        }
+        if (Humor == -3)
+        {
+            targetPosition = GameObject.Find("Hospital").transform.position;
         }
 
 
     }
+
 }
 
