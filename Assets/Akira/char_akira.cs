@@ -84,6 +84,7 @@ public class char_akira : MonoBehaviour
 
         if (other.gameObject.tag == "Char")
         {
+            Relacoes(other.gameObject);
             Interagir();
             Debug.Log("Pegar Valores");
         }
@@ -93,15 +94,73 @@ public class char_akira : MonoBehaviour
     public void Interagir()
     {
 
-      
-         
-
-        
-            
 
 
-
-        
     }
+
+
+    void Relacoes(GameObject other)
+    {
+
+
+
+
+
+
+        switch (other.GetComponent<char_akira>().money) 
+        {
+
+            case Money.Poor:
+                Humor++;
+                persona = Persona.Kind;
+
+                break;
+
+            case Money.Medium:
+                Humor+= 0;
+                persona = Persona.Shy;
+                    break;
+            case Money.Rich:
+                Humor--;
+                persona = Persona.Grumpy;
+                if (targetPosition == GameObject.Find("Bar").transform.position)
+                {
+                    targetPosition= GameObject.Find("Outro").transform.position;
+                }
+                else
+                {
+                    targetPosition = GameObject.Find("Bar").transform.position;
+                }
+
+               break;
+
+        
+        }
+
+        switch (other.GetComponent<char_akira>().gender)
+        {
+
+            case Gender.Female:
+                Humor++;
+                persona = Persona.Flirty;
+
+                break;
+
+            case Gender.Male:
+                Humor++;
+                persona = Persona.Flirty;
+
+                break;
+
+            case Gender.Neutro:
+                Humor++;
+                persona = Persona.Kind;
+
+                break;
+        }
+
+    }
+
+
 }
 
