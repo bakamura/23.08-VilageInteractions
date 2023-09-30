@@ -1,28 +1,24 @@
 using UnityEngine;
 
-public abstract class CharBase : MonoBehaviour
-{
-    public enum GenderT
-    {
+public abstract class CharBase : MonoBehaviour {
+
+    public enum GenderT {
         Male,
         Female,
         Other
     }
-    public enum RaceT
-    {
+    public enum RaceT {
         Human,
         Animal,
         Spirit,
         NonHuman
     }
-    public enum MoneyT
-    {
+    public enum MoneyT {
         Poor,
         Medium,
         Rich
     }
-    public enum PersonalityT
-    {
+    public enum PersonalityT {
         Sadistic,
         Grumpy,
         Loud,
@@ -39,9 +35,10 @@ public abstract class CharBase : MonoBehaviour
     [SerializeField] protected PersonalityT persona;
 
     public GenderT Gender { get { return gender; } }
-    public uint Age {  get { return age; } }
+    public uint Age { get { return age; } }
     public RaceT Race { get { return race; } }
     public MoneyT Money { get { return money; } }
+    public float Humor { get { return humor; } }
     public PersonalityT Persona { get { return persona; } }
 
     public abstract void Interact(CharBase charInfo);
