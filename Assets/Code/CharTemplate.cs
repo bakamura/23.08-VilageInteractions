@@ -47,9 +47,7 @@ public class CharTemplate : CharBase
     }
     void Start()
     {
-        AdicionarARotina(1, "TownSquare");
-        //Nesse caso o jogador esta indo a TownSquare no momento 0
-        AdicionarARotina(0, "Hospital");
+
         //Nao mexer na linha a baixo
         targetPosition = transform.position;
         GameManager.onChangePeriod.AddListener(OnChangePeriod);
