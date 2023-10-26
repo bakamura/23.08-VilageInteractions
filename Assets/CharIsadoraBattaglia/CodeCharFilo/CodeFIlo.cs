@@ -2,100 +2,94 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CodeFIlo : MonoBehaviour
+public class CodeFilo : CharBase
 {
-    public float moveSpeed;
-
-    public Vector3 targetPosition;
-    public GameObject gamemanager;
-    private Timer timer;
-    public List<GameObject> lugares;
     private Dictionary<int, string> periodToLocation = new Dictionary<int, string>();
-
-    public int Age = 90;
-    public enum Gender { Male, Female, Neutro }
-    public enum Money { Poor, Medium, Rich }
-    public enum Persona { Grumpy, Shy, Kind, Flirty, Sado, Loud }
-    public enum Race { Dog, Elemental, Boto, Human }
-    public float Humor;
-    public Gender gender;
-    public Money money;
-    public Persona persona;
-    public Race race;
-
-    //----------------------------------------------------
-
-
-    private void Start()
+    private Vector3 targetPosition;
+    [SerializeField] private float moveSpeed = 1f;
+    private void Update()
     {
-        gamemanager = GameObject.FindGameObjectWithTag("Horario");
-        timer = gamemanager.GetComponent<Timer>();
-        lugares = timer.Lugares;
-
-
-        periodToLocation.Add(0, "Hospital");
-        periodToLocation.Add(1, "Padaria");
-        periodToLocation.Add(2, "Biblioteca");
-        periodToLocation.Add(3, "Square");
-        periodToLocation.Add(4, "Bar");
-        periodToLocation.Add(5, "Biblioteca");
-
-
-
-        int initialPeriod = timer.GetCurrentPeriod();
-        ChangeLocation(initialPeriod);
+        //Nao precisa mexer
+        transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed / 10 * Time.deltaTime);
+    }
+    private void AdicionarARotina(int periodoDoDia, string lugar)
+    {
+        periodToLocation.Add(periodoDoDia, lugar);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-    }
+    //Para implementacao simples mexer apenas a baixo
 
-    public void MudaLugar(int periodo)
-    {
-        ChangeLocation(periodo);
-    }
+    /*
+    Nome dos lugares no mapa:
+    TownSquare
+    Bakery
+    Bar
+    Library
+    Hospital
+    ?
+    */
 
-    private void ChangeLocation(int periodo)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
-
-        if (periodToLocation.ContainsKey(periodo))
+        //Nao mexer nessa funcao ate a implementacao de interacoes especificas com alguns personagens
+        if (collision.gameObject.tag == "Char")
         {
-            string locationName = periodToLocation[periodo];
-            GameObject locationObject = lugares.Find(lugar => lugar.name == locationName);
-
-            if (locationObject != null)
+            if (collision.TryGetComponent<CharBase>(out CharBase charBase))
             {
-                targetPosition = timer.positions[lugares.IndexOf(locationObject)];
+                charBase.Interact(this);
             }
             else
             {
-                Debug.LogWarning("Location not found: " + locationName);
+                Debug.Log("Erro em pegar informacoes de" + collision.gameObject.name);
             }
         }
-        else
+    }
+    void Start()
+    {
+        AdicionarARotina(0, "Bakery");
+        AdicionarARotina(2, "TownSquare");
+        AdicionarARotina(4, "Bakery");
+        AdicionarARotina(5, "Bar");
+
+
+        //Nao mexer na linha a baixo
+        targetPosition = transform.position;
+        GameManager.onChangePeriod.AddListener(OnChangePeriod);
+    }
+    public override void Interact(CharBase charInfo)
+    {
+        switch (charInfo.Persona)
         {
-            Debug.LogWarning("Period not found: " + periodo);
+            case PersonalityT.Shy:
+                humor += 1;
+                break;
+
+            case PersonalityT.Grumpy:
+                humor -= 1;
+                break;
+
+            case PersonalityT.Kind:
+                humor += 2;
+                break;
+
+            case PersonalityT.Sadistic:
+                humor -= 2;
+                break;
         }
+       
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    public void OnChangePeriod(int periodo)
     {
-
-        if (other.gameObject.tag == "Char")
+        if (periodToLocation.ContainsKey(periodo))
         {
-            Interagir();
-            Debug.Log("Pegar Valores");
+            Vector3 locationObject = GameManager._placePosition[periodToLocation[periodo]];
+
+            if (locationObject != null)
+            {
+                targetPosition = locationObject;
+            }
         }
-        Debug.Log("Chegou");
-    }
-
-    public void Interagir()
-    {
-
-
-
     }
 }
 
