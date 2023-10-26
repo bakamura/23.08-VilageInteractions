@@ -18,14 +18,14 @@ public class GameManager : MonoBehaviour {
     [Header("Places")]
 
     [SerializeField] private Transform _placesContainer;
-    public Dictionary<string, Vector3> _placePosition = new Dictionary<string, Vector3>();
+    public static Dictionary<string, Vector3> _placePosition = new Dictionary<string, Vector3>();
 
     void Awake() {
         _periodDisplay.text = "Starting the Day";
+        for (int i = 0; i < _placesContainer.childCount; i++) _placePosition.Add(_placesContainer.GetChild(i).name, _placesContainer.GetChild(i).position);
     }
 
     private void Start() {
-        for (int i = 0; i < _placesContainer.childCount; i++) _placePosition.Add(_placesContainer.GetChild(i).name, _placesContainer.GetChild(i).position);
     }
 
     private void Update() {
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour {
         if (_periodCurrent < _periodTotal) {
             _periodCurrent ++;
             onChangePeriod.Invoke(_periodCurrent);
-            _periodDisplay.text = $"{(_periodCurrent / _periodTotal).ToString()}:00";
+            _periodDisplay.text = $"{_periodCurrent}:00";
         }
     }
 
