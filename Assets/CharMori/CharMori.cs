@@ -16,9 +16,10 @@ public class CharMori : CharBase
     {
         periodToLocation.Add(periodoDoDia, lugar);
     }
-
-    //Para implementacao simples mexer apenas a baixo
-
+    private void Awake()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
     /*
     Nome dos lugares no mapa:
     TownSquare
@@ -28,9 +29,27 @@ public class CharMori : CharBase
     Hospital
     ?
     */
+    public Sprite originalSprite;
+    [Range(0, 20)] public int morphAbility = 20;
+    readonly private int maxAbilityCount = 20;
 
-    [Range(-3, 3)] public float crazyness;
+    [Header("-----Real Values-----"), Space]
+    public GenderT realGender;
+    public uint realAge;
+    public RaceT realRace;
+    public MoneyT realMoney;
+    [Range(-3, 3)] public float realHumor;
+    public PersonalityT realPersona;
 
+    [Header("-----Fake Values-----"), Space]
+    public GenderT fakeGender;
+    public uint fakeAge;
+    public RaceT fakeRace;
+    public MoneyT fakeMoney;
+    [Range(-3, 3)] public float fakeHumor;
+    public PersonalityT fakePersona;
+
+    [HideInInspector] public SpriteRenderer spriteRenderer;
     public void OnTriggerEnter2D(Collider2D collision)
     {
         //Nao mexer nessa funcao ate a implementacao de interacoes especificas com alguns personagens
@@ -55,9 +74,75 @@ public class CharMori : CharBase
     }
     public override void Interact(CharBase charInfo)
     {
+        if (morphAbility > 0)
+        {
+            //Try get other npc Sprite Info
+            if (RollForSuccessChance())
+            {
+                spriteRenderer.sprite = charInfo.GetComponent<SpriteRenderer>().sprite;
+                spriteRenderer.color = new Color(0.5f, 0, 1);
+            }
+            morphAbility--;
+            CheckIfAbilityIsLowCharge();
+        }
+        else
+        {
 
+        }
     }
+    private bool RollForSuccessChance()
+    {
+        return Random.value > morphAbility / maxAbilityCount;
+    }
+    private float GetSuccessChance()
+    {
+        return morphAbility / maxAbilityCount;
+    }
+    private void DefineCharValues(CharBase otherChar)
+    {
+        if (RollForSuccessChance())
+        {
+            spriteRenderer.sprite = otherChar.GetComponent<SpriteRenderer>().sprite;
+            spriteRenderer.color = new Color(0.5f, 0, 1);
+        }
+        else
+        {
+            spriteRenderer.sprite = originalSprite;
+            spriteRenderer.color = Color.white;
+        }
 
+        //Define gender
+        if (RollForSuccessChance()) gender = fakeGender;
+        else gender = realGender;
+
+        //Define age
+        if (RollForSuccessChance()) age = fakeAge;
+        else age = (uint)Mathf.RoundToInt(Mathf.Lerp(fakeAge, realAge, GetSuccessChance() * (Random.value * 0.75f)));
+
+        //Define race
+        
+
+        //Define money
+
+
+        //Define humor
+
+
+        //Define persona
+    }
+    private void CheckIfAbilityIsLowCharge()
+    {
+        if (morphAbility <= 0)
+        {
+            if (RestoreAbilityCoroutine == null) RestoreAbilityCoroutine = StartCoroutine(RestoreAbility());
+        }
+    }
+    Coroutine RestoreAbilityCoroutine;
+    private IEnumerator RestoreAbility()
+    {
+        yield return new WaitForSeconds(5f);
+        morphAbility = maxAbilityCount;
+    }
     public void OnChangePeriod(int periodo)
     {
         if (periodToLocation.ContainsKey(periodo))
