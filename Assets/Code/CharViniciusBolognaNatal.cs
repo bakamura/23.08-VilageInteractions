@@ -8,16 +8,21 @@ public class CharViniciusBolognaNatal : CharBase
 {
     [SerializeField] private float _movmentSpeed;
     [SerializeField] private PlaceData[] _newPlacesPrefabs;
+    [SerializeField] private float _distanceFromTargetPlaceTolerance = .5f;
 
     private List<PlaceData> _currentAvailablePlacesToGo = new List<PlaceData>();
     private Rigidbody2D _rb;
-    private PlaceData _currentPlace;
+    private PlaceData _currentPlaceToGo;
     private List<PlaceData> _currentCreatedPlaces = new List<PlaceData>();
     private List<PlaceData> _currentAvailableToCreatePlaces = new List<PlaceData>();
     private const int _maxHumorChange = 2;
+    private Transform _placesContainer;
+    private bool _isBehaviourLoopDone = true;
+    private Coroutine _isMoving = null;
 
     private void Awake()
     {
+        _placesContainer = GameObject.Find("Places").transform;
         _rb = GetComponent<Rigidbody2D>();
         _currentAvailableToCreatePlaces = new List<PlaceData>(_newPlacesPrefabs.ToList());
 
@@ -50,20 +55,33 @@ public class CharViniciusBolognaNatal : CharBase
 
     private void ChangePlace(int currentPeriod)
     {
-        MoveTo(ChoseRandomPlace());
+        if (_isBehaviourLoopDone) MoveTo(ChoseRandomPlace());
     }
 
     private void MoveTo(PlaceData data)
     {
-        _rb.velocity = data.Location.normalized * _movmentSpeed;
+        if(_isMoving == null)
+        {
+            _currentPlaceToGo = data;
+            _rb.velocity = data.Location.normalized * _movmentSpeed;
+            _isMoving = StartCoroutine(CheckDestinationReached());
+        }
+    }
+
+    private IEnumerator CheckDestinationReached()
+    {
+        while (Vector2.Distance(transform.position, _currentPlaceToGo.Location) > _distanceFromTargetPlaceTolerance)
+        {
+            yield return null;
+        }
     }
 
     private void CreateNewPlace()
     {
-        if(_currentAvailableToCreatePlaces.Count > 0)
+        if (_currentAvailableToCreatePlaces.Count > 0)
         {
             PlaceData prefadChosen = _currentAvailableToCreatePlaces[GetRandomNumber(0, _currentAvailableToCreatePlaces.Count)];
-            GameObject temp = Instantiate(prefadChosen.Instance, prefadChosen.Location, Quaternion.identity, null/*colocar o placesContainer aqui*/);
+            GameObject temp = Instantiate(prefadChosen.Instance, prefadChosen.Location, Quaternion.identity, _placesContainer);
             GameManager._placePosition.Add(temp.name, temp.transform.position);
             _currentAvailableToCreatePlaces.Remove(prefadChosen);
             _currentCreatedPlaces.Add(prefadChosen);
@@ -73,7 +91,7 @@ public class CharViniciusBolognaNatal : CharBase
 
     private void DestroyCreatedPlace()
     {
-        if(_currentCreatedPlaces.Count > 0)
+        if (_currentCreatedPlaces.Count > 0)
         {
             PlaceData prefadChosen = _currentCreatedPlaces[GetRandomNumber(0, _currentCreatedPlaces.Count)];
             GameManager._placePosition.Remove(prefadChosen.Name);
@@ -85,8 +103,8 @@ public class CharViniciusBolognaNatal : CharBase
 
     private PlaceData ChoseRandomPlace()
     {
-        _currentPlace = _currentAvailablePlacesToGo[GetRandomNumber(0, _currentAvailablePlacesToGo.Count)];
-        return _currentPlace;
+        _currentPlaceToGo = _currentAvailablePlacesToGo[GetRandomNumber(0, _currentAvailablePlacesToGo.Count)];
+        return _currentPlaceToGo;
     }
 
     private void UpdateBehaviour()
@@ -107,8 +125,9 @@ public class CharViniciusBolognaNatal : CharBase
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.name == _currentPlace.Name)
+        if (other.name == _currentPlaceToGo.Name && _isBehaviourLoopDone)
         {
+            _isBehaviourLoopDone = false;
             _rb.velocity = Vector2.zero;
             UpdateBehaviour();
         }
