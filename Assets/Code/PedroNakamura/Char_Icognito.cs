@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
 using UnityEngine;
 
 public class Char_Icognito : CharBase {
@@ -90,7 +87,7 @@ public class Char_Icognito : CharBase {
                 if (_charInteractedToday < 4) {
                     _interactionTypeCurrent = InteractionType.Neutral;
                     _followTargetCurrent = null;
-                    _followPlaceCurrent = _gameManager._placePosition["TownSquare"];
+                    _followPlaceCurrent = GameManager._placePosition["TownSquare"];
                 }
                 else {
                     _interactionTypeCurrent = InteractionType.Hurtful;
@@ -102,7 +99,7 @@ public class Char_Icognito : CharBase {
                 if (_charInteractedToday < 4) {
                     _interactionTypeCurrent = InteractionType.Neutral;
                     _followTargetCurrent = null;
-                    _followPlaceCurrent = _gameManager._placePosition["TownSquare"];
+                    _followPlaceCurrent = GameManager._placePosition["TownSquare"];
                 }
                 else {
                     _interactionTypeCurrent = InteractionType.Hurtful;
@@ -114,7 +111,7 @@ public class Char_Icognito : CharBase {
                 if (_charInteractedToday < 7) {
                     _interactionTypeCurrent = InteractionType.Neutral;
                     _followTargetCurrent = null;
-                    _followPlaceCurrent = _gameManager._placePosition["TownSquare"];
+                    _followPlaceCurrent = GameManager._placePosition["TownSquare"];
                 }
                 else {
                     _interactionTypeCurrent = InteractionType.Helpful;
@@ -126,7 +123,7 @@ public class Char_Icognito : CharBase {
                 if (_charInteractedToday < 7) {
                     _interactionTypeCurrent = InteractionType.Neutral;
                     _followTargetCurrent = null;
-                    _followPlaceCurrent = _gameManager._placePosition["TownSquare"];
+                    _followPlaceCurrent = GameManager._placePosition["TownSquare"];
                 }
                 else {
                     _interactionTypeCurrent = InteractionType.Helpful;
@@ -137,11 +134,11 @@ public class Char_Icognito : CharBase {
             case 7:
                 _followTargetCurrent = null;
                 // Will Cause unexpected behaviour
-                _followPlaceCurrent = GetFarthestFrom(_movementFollowTargetHurt, _gameManager._placePosition["Bakery"], _gameManager._placePosition["Bar"]);
+                _followPlaceCurrent = GetFarthestFrom(_movementFollowTargetHurt, GameManager._placePosition["Bakery"], GameManager._placePosition["Bar"]);
                 break;
             case 8:
                 _followTargetCurrent = null;
-                _followPlaceCurrent = _gameManager._placePosition["TownSquare"];
+                _followPlaceCurrent = GameManager._placePosition["TownSquare"];
                 break;
             case 9:
                 switch (Random.Range(0, 3)) {
