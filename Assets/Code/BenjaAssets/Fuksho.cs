@@ -64,10 +64,12 @@ public class Fuksho : CharBase
                 case "TownSquare":
                     persona = PersonalityT.Loud;
                     money = MoneyT.Rich;
+                    humor+=2;
                     break;
                 case "Bakery":
                     persona=PersonalityT.Kind;
                     money=MoneyT.Medium;
+                    humor+=.5f;
                     break;
                 case "Bar":
                 
@@ -79,9 +81,11 @@ public class Fuksho : CharBase
                 case "Library":
                     //Caso o npc estiver na biblioteca o npc ficara timido
                     persona = PersonalityT.Shy;
+                    humor+=.5f;
                     break;
                 case "Hospital":
                     persona=PersonalityT.Kind;
+                    money=MoneyT.Medium;
                     break;
                 case "?":
 
@@ -126,20 +130,57 @@ public class Fuksho : CharBase
         //charInfo.Humor;
 
         //Vamos fazer um exemplo que o nosso personagem se o outro for da personalidade "Loud" ele ira perder humor
-        if (charInfo.Persona == PersonalityT.Loud)
+        switch(charInfo.Persona)
         {
-            humor += 1;
-        }
-        if(charInfo.Money == MoneyT.Rich)
-        {
-            persona=PersonalityT.Kind;
-            humor+=2;
-        }
-        if(charInfo.Persona==PersonalityT.Sadistic)
-        {
+            case PersonalityT.Loud:
+            humor+=1;
+            break;
+            case PersonalityT.Flirty:
+            humor+=1;
+            break;
+            case PersonalityT.Kind:
+            humor+=1;
+            break;
+            case PersonalityT.Grumpy:
+            humor-=1;
+            break;
+            case PersonalityT.Sadistic:
             humor-=2;
+            break;
+            case PersonalityT.Shy:
+            humor=1;
+            break;
         }
 
+        switch(charInfo.Gender)
+        {
+            case GenderT.Female:
+            persona=PersonalityT.Flirty;
+            humor+=1;
+            break;
+            case GenderT.Male:
+            persona=PersonalityT.Loud;
+            break;
+            case GenderT.Other:
+            persona=PersonalityT.Loud;
+            break;
+        }
+        switch(charInfo.Money)
+        {
+            case MoneyT.Rich:
+            humor+=2;
+            persona=PersonalityT.Kind;
+            break;
+            case MoneyT.Medium:
+            humor+=1;
+            persona=PersonalityT.Loud;
+            break;
+            case MoneyT.Poor:
+            persona=PersonalityT.Loud;
+            break;
+        }
+
+        
     }
 
     public void OnChangePeriod(int periodo)
