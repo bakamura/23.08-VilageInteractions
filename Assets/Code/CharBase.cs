@@ -31,19 +31,19 @@ public abstract class CharBase : MonoBehaviour
         Flirty
     }
 
-    private GenderT gender;
-    private uint age;
-    private RaceT race;
-    private MoneyT money;
-    private float humor;
-    private PersonalityT persona;
+    [SerializeField] protected GenderT gender;
+    [SerializeField,] protected uint age;
+    [SerializeField] protected RaceT race;
+    [SerializeField] protected MoneyT money;
+    [SerializeField, Range(-3, 3)] protected float humor;
+    [SerializeField] protected PersonalityT persona;
 
     public GenderT Gender { get { return gender; } }
-    public uint Age {  get { return age; } }
+    public uint Age { get { return age; } }
     public RaceT Race { get { return race; } }
     public MoneyT Money { get { return money; } }
+    public float Humor { get { return humor; } }
     public PersonalityT Persona { get { return persona; } }
 
     public abstract void Interact(CharBase charInfo);
-
 }

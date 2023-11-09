@@ -1,100 +1,137 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
-public class FelipeMoraesChar : MonoBehaviour
+public class FelipeMoraesChar : CharBase
 {
-    public int Age = 90;
-    public enum Gender { Male, Female, Neutro }
-    public enum Money { Poor, Medium, Rich }
-    public enum Persona { Grumpy, Shy, Kind, Flirty, Sado, Loud }
-    public enum Race { Dog, Elemental, Boto, Human }
-    public float Humor;
-    public Gender gender;
-    public Money money;
-    public Persona persona;
-    public Race race;
-
-    public float moveSpeed;
-
-    public Vector3 targetPosition;
-    public GameObject gamemanager;
-    private Timer timer;
-    public List<GameObject> lugares;
     private Dictionary<int, string> periodToLocation = new Dictionary<int, string>();
+    private Vector3 targetPosition;
+    [SerializeField] private float moveSpeed = 5f;
 
-   
+    /*
+    Nome dos lugares no mapa:
+    TownSquare
+    Bakery
+    Bar
+    Library
+    Hospital
+    ?
+    */
 
-    void Start()
+    private void Update()
     {
-
-        gamemanager = GameObject.FindGameObjectWithTag("Horario");
-        timer = gamemanager.GetComponent<Timer>();
-        lugares = timer.Lugares;
-
-
-        periodToLocation.Add(0, "Outro");
-        periodToLocation.Add(1, "Square");
-        periodToLocation.Add(2, "Padaria");
-        periodToLocation.Add(3, "Square");
-        periodToLocation.Add(4, "Biblioteca");
-        periodToLocation.Add(5, "Outro");
-
-
-
-        int initialPeriod = timer.GetCurrentPeriod();
-        ChangeLocation(initialPeriod);
+        //Nao precisa mexer
+        transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed / 10 * Time.deltaTime);
+    }
+    private void AdicionarARotina(int periodoDoDia, string lugar)
+    {
+        periodToLocation.Add(periodoDoDia, lugar);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-    }
-
-    public void MudaLugar(int periodo)
-    {
-        ChangeLocation(periodo);
-    }
-
-    private void ChangeLocation(int periodo)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
 
-        if (periodToLocation.ContainsKey(periodo))
+        if (collision.gameObject.tag == "Char")
         {
-            string locationName = periodToLocation[periodo];
-            GameObject locationObject = lugares.Find(lugar => lugar.name == locationName);
-
-            if (locationObject != null)
+            if (collision.TryGetComponent<CharTemplate>(out CharTemplate charTemplate))
             {
-                targetPosition = timer.positions[lugares.IndexOf(locationObject)];
+                //Aqui pode acessar as variaveis unicas daquele npc
+            }
+            // Colocar apos o {} "else"
+            else if (collision.TryGetComponent<CharBase>(out CharBase charBase))
+            {
+                charBase.Interact(this);
             }
             else
             {
-                Debug.LogWarning("Location not found: " + locationName);
+                Debug.Log("Erro em pegar informacoes de" + collision.gameObject.name);
             }
         }
         else
         {
-            Debug.LogWarning("Period not found: " + periodo);
+            //Reacao do npc baseado na posicao de mundo
+            switch (collision.gameObject.name)
+            {
+                case "TownSquare":
+                    humor = 2;
+                    persona = PersonalityT.Loud;
+                    break;
+                case "Bakery":
+                    humor = 3;
+                    persona = PersonalityT.Loud;
+                    money = MoneyT.Medium;
+                    break;
+                case "Bar":
+                    break;
+                case "Library":
+                    persona = PersonalityT.Shy;
+                    humor = 0;
+                    break;
+                case "Hospital":
+                    break;
+                case "?":
+                    humor = 3;
+                    persona = PersonalityT.Grumpy;
+                    break;
+            }
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void Start()
     {
+        gender = GenderT.Male;
+        race = RaceT.Human;
+        age = 30;
+        money = MoneyT.Poor;
+        humor = 1;
+        persona = PersonalityT.Kind;
 
-        if (other.gameObject.tag == "Char")
+        AdicionarARotina(0, "?");
+        AdicionarARotina(1, "TownSquare");
+        AdicionarARotina(2, "Bakery");
+        AdicionarARotina(3, "Bakery");
+        AdicionarARotina(4, "TownSquare");
+        AdicionarARotina(5, "Library");
+        AdicionarARotina(6, "?");
+
+        //Nao mexer na linha a baixo 
+        targetPosition = transform.position;
+        GameManager.onChangePeriod.AddListener(OnChangePeriod);
+    }
+    public override void Interact(CharBase charInfo)
+    {
+        if(charInfo.Race == RaceT.Human)
         {
-            Interagir();
-            Debug.Log("Pegar Valores");
+            persona = PersonalityT.Sadistic;
+            humor = -3;
         }
-        Debug.Log("Chegou");
+        else if(charInfo.Race == RaceT.NonHuman && charInfo.Gender == GenderT.Male && charInfo.Persona == PersonalityT.Shy && charInfo.Age <= 90)
+        {
+            persona = PersonalityT.Loud;
+            humor = -1;
+        }
+        else if(charInfo.Race == RaceT.NonHuman && charInfo.Gender == GenderT.Male && charInfo.Persona == PersonalityT.Loud && charInfo.Age >= 100 && charInfo.Money == MoneyT.Rich)
+        {
+            persona = PersonalityT.Shy;
+            humor = 3;
+        }
+        else
+        {
+
+        }
+
     }
-
-    public void Interagir()
+    public void OnChangePeriod(int periodo)
     {
+        if (periodToLocation.ContainsKey(periodo))
+        {
+            Vector3 locationObject = GameManager._placePosition[periodToLocation[periodo]];
 
-
-
+            if (locationObject != null)
+            {
+                targetPosition = locationObject;
+            }
+        }
     }
 }
