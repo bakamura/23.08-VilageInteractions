@@ -30,16 +30,41 @@ public class CharMori : CharBase
     ?
     */
     public Sprite originalSprite;
-    [Range(0, 20)] public int morphAbility = 20;
-    readonly private int maxAbilityCount = 20;
+    [Range(0, 10)] public int socialMaskingEnergy = 10;
+    readonly private int maxSocialMaskingEnergyCount = 10;
+
+    private enum Identity
+    {
+        ShyKid,
+        CrazyWoman,
+        AngryOldMan
+    }
+    private Identity currentIdentity;
 
     [Header("-----Real Values-----"), Space]
-    public GenderT realGender;
-    public uint realAge;
-    public RaceT realRace;
-    public MoneyT realMoney;
-    [Range(-3, 3)] public float realHumor;
-    public PersonalityT realPersona;
+    [Header("-----Personality Shy Kid-----")]
+    public GenderT realShyGender;
+    public uint realShyAge;
+    public RaceT realShyRace;
+    public MoneyT realShyMoney;
+    [Range(-3, 3)] public float realShyHumor;
+    public PersonalityT realShyPersona;
+
+    [Header("-----Personality Crazy Woman-----")]
+    public GenderT realCrazyGender;
+    public uint realCrazyAge;
+    public RaceT realCrazyRace;
+    public MoneyT realCrazyMoney;
+    [Range(-3, 3)] public float realCrazyHumor;
+    public PersonalityT realCrazyPersona;
+
+    [Header("-----Personality Angry Old Guy-----")]
+    public GenderT realAngryGender;
+    public uint realAngryAge;
+    public RaceT realAngryRace;
+    public MoneyT realAngryMoney;
+    [Range(-3, 3)] public float realAngryHumor;
+    public PersonalityT realAngryPersona;
 
     [Header("-----Fake Values-----"), Space]
     public GenderT fakeGender;
@@ -48,6 +73,8 @@ public class CharMori : CharBase
     public MoneyT fakeMoney;
     [Range(-3, 3)] public float fakeHumor;
     public PersonalityT fakePersona;
+
+
 
     [HideInInspector] public SpriteRenderer spriteRenderer;
     public void OnTriggerEnter2D(Collider2D collision)
@@ -65,38 +92,84 @@ public class CharMori : CharBase
             }
         }
     }
+
+    public void GetRealCurrentIdentity(out GenderT realGender, out uint realAge, out RaceT realRace, out MoneyT realMoney, out float realHumor, out PersonalityT realPersona)
+    {
+        switch (currentIdentity)
+        {
+            case Identity.ShyKid:
+            default:
+                realGender = realShyGender;
+                realAge = realShyAge;
+                realRace = realShyRace;
+                realMoney = realShyMoney;
+                realHumor = realShyHumor;
+                realPersona = realShyPersona;
+                break;
+            case Identity.CrazyWoman:
+                realGender = realCrazyGender;
+                realAge = realCrazyAge;
+                realRace = realCrazyRace;
+                realMoney = realCrazyMoney;
+                realHumor = realCrazyHumor;
+                realPersona = realCrazyPersona;
+                break;
+            case Identity.AngryOldMan:
+                realGender = realAngryGender;
+                realAge = realAngryAge;
+                realRace = realAngryRace;
+                realMoney = realAngryMoney;
+                realHumor = realAngryHumor;
+                realPersona = realAngryPersona;
+                break;
+        }
+    }
+
     void Start()
     {
-
+        currentIdentity = (Identity)Random.Range(0, 2);
         //Nao mexer na linha a baixo
         targetPosition = transform.position;
         GameManager.onChangePeriod.AddListener(OnChangePeriod);
     }
     public override void Interact(CharBase charInfo)
     {
-        if (morphAbility > 0)
+        if (socialMaskingEnergy > 0)
         {
-            //Try get other npc Sprite Info
-            if (RollForSuccessChance())
-            {
-                spriteRenderer.sprite = charInfo.GetComponent<SpriteRenderer>().sprite;
-                spriteRenderer.color = new Color(0.5f, 0, 1);
-            }
-            morphAbility--;
-            CheckIfAbilityIsLowCharge();
+            DefineCharValues(charInfo);
+            socialMaskingEnergy--;
         }
-        else
-        {
+        CheckIfAbilityIsLowCharge();
+        ReactToOtherNpc(charInfo);
+    }
 
+    public void ReactToOtherNpc(CharBase charInfo)
+    {
+        switch(currentIdentity)
+        {
+            case Identity.ShyKid:
+                switch(charInfo.Persona)
+                {
+                    case PersonalityT.Kind:
+                    case PersonalityT.Shy:
+                        realShyHumor += 1;
+                        break;
+                    default:
+                        realShyHumor -= 1;
+                        break;
+                }
+                //Continuar daqui
+                break;
         }
     }
+
     private bool RollForSuccessChance()
     {
-        return Random.value > morphAbility / maxAbilityCount;
+        return Random.value > socialMaskingEnergy / maxSocialMaskingEnergyCount;
     }
     private float GetSuccessChance()
     {
-        return morphAbility / maxAbilityCount;
+        return socialMaskingEnergy / maxSocialMaskingEnergyCount;
     }
     private void DefineCharValues(CharBase otherChar)
     {
@@ -110,29 +183,34 @@ public class CharMori : CharBase
             spriteRenderer.sprite = originalSprite;
             spriteRenderer.color = Color.white;
         }
-
+        GetRealCurrentIdentity(out GenderT realGender, out uint realAge, out RaceT realRace, out MoneyT realMoney, out float realHumor, out PersonalityT realPersona);
         //Define gender
         if (RollForSuccessChance()) gender = fakeGender;
         else gender = realGender;
 
         //Define age
         if (RollForSuccessChance()) age = fakeAge;
-        else age = (uint)Mathf.RoundToInt(Mathf.Lerp(fakeAge, realAge, GetSuccessChance() * (Random.value * 0.75f)));
+        else age = (uint)Mathf.RoundToInt(Mathf.Lerp(realAge, fakeAge, GetSuccessChance() * (Random.value * 0.75f)));
 
         //Define race
-        
+        if (RollForSuccessChance()) race = fakeRace;
+        else race = realRace;
 
         //Define money
-
+        if (RollForSuccessChance()) money = fakeMoney;
+        else money = realMoney;
 
         //Define humor
-
+        if (RollForSuccessChance()) humor = fakeHumor;
+        else humor = Mathf.Lerp(realHumor, fakeHumor, GetSuccessChance() * (Random.value * 0.75f));
 
         //Define persona
+        if (RollForSuccessChance()) persona = fakePersona;
+        else persona = realPersona;
     }
     private void CheckIfAbilityIsLowCharge()
     {
-        if (morphAbility <= 0)
+        if (socialMaskingEnergy <= 0)
         {
             if (RestoreAbilityCoroutine == null) RestoreAbilityCoroutine = StartCoroutine(RestoreAbility());
         }
@@ -140,8 +218,8 @@ public class CharMori : CharBase
     Coroutine RestoreAbilityCoroutine;
     private IEnumerator RestoreAbility()
     {
-        yield return new WaitForSeconds(5f);
-        morphAbility = maxAbilityCount;
+        yield return new WaitForSeconds(10f);
+        socialMaskingEnergy = maxSocialMaskingEnergyCount;
     }
     public void OnChangePeriod(int periodo)
     {
