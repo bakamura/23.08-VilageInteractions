@@ -135,8 +135,51 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gender: 0
-  age: 0
+  age: 2
   race: 0
   money: 0
   humor: 0
-  persona: 0
+  persona: 2
+  _movmentSpeed: 10
+  _distanceFromTargetPlaceTolerance: 0.5
+  _maxActionsPossiblePerUpdate: 1
+  _customRadomizerRule:
+    RandomizerRule: 0
+    Weight: 0
+  _newPlacesPrefabs:
+  - Prefab: {fileID: 276695886863335556, guid: 0c6d0f3ee54f9c54dbae0c00225f6ba9, type: 3}
+    Name: Boate
+    Location: {x: 20.48, y: -7.63, z: 0}
+    InstanceInScene: {fileID: 0}
+  - Prefab: {fileID: 8839448345757007993, guid: 35231724485933945bb465f77ed26de5, type: 3}
+    Name: Cassino
+    Location: {x: -20.12, y: -4.97, z: 0}
+    InstanceInScene: {fileID: 0}
+  - Prefab: {fileID: 3338317008062255306, guid: deb7d6b1a3af0f8468756acd502f16d1, type: 3}
+    Name: Cemetery
+    Location: {x: -10.27, y: 14.69, z: 0}
+    InstanceInScene: {fileID: 0}
+  - Prefab: {fileID: 2377366053104648541, guid: b32db6fb3d5d98e4b8c4723692d60a23, type: 3}
+    Name: Easter Egg
+    Location: {x: -25.2, y: -13.18, z: 0}
+    InstanceInScene: {fileID: 0}
+  - Prefab: {fileID: 2315064514371840521, guid: adfe90379d6e0d049a936c452ac6e438, type: 3}
+    Name: Farm
+    Location: {x: 7.21, y: -6.14, z: 0}
+    InstanceInScene: {fileID: 0}
+  - Prefab: {fileID: 2738996398955086303, guid: ef0c4ce2a2c1e9e469076679afd8e2ed, type: 3}
+    Name: Fight Club
+    Location: {x: -23.05, y: 1.04, z: 0}
+    InstanceInScene: {fileID: 0}
+  - Prefab: {fileID: 8646520451998339367, guid: 94fd345b6dc2c9844b28ae33de3b5acc, type: 3}
+    Name: Hole
+    Location: {x: -4.99, y: -5.13, z: 0}
+    InstanceInScene: {fileID: 0}
+  - Prefab: {fileID: 773967605695469605, guid: c426722cb52241c40affe3994c8978d5, type: 3}
+    Name: Space Ship
+    Location: {x: 12.12, y: 15.97, z: 0}
+    InstanceInScene: {fileID: 0}
+  _debugActive: 0
+  _debugSize: 0.2
+  _debugColor: {r: 1, g: 0, b: 0, a: 1}
+  _stepsDebugTest: 
