@@ -56,6 +56,7 @@ public class CodeFilo : CharBase
         targetPosition = transform.position;
         GameManager.onChangePeriod.AddListener(OnChangePeriod);
     }
+    //colocar açoes e personalidades especificas da filo: playful, sweet, bite, pee.
     public override void Interact(CharBase charInfo)
     {
         switch (charInfo.Persona)
@@ -76,7 +77,27 @@ public class CodeFilo : CharBase
                 humor -= 2;
                 break;
         }
-       
+
+        switch (charInfo.Race)
+        {
+            case RaceT.Human:
+                humor += 1;
+                break;
+
+            case RaceT.Animal:
+                humor += 2;
+                break;
+
+            case RaceT.Spirit:
+                humor -= 1;
+                break;
+
+            case RaceT.NonHuman:
+                humor -= 1;
+                break;
+        }
+
+
     }
 
     public void OnChangePeriod(int periodo)
