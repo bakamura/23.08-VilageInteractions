@@ -1,26 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Character_chris : MonoBehaviour
+public class Character_chris : CharBase
 {
     public float moveSpeed;
-
-    public Vector3 targetPosition;
-    public GameObject gamemanager;
-    private Timer timer;
-    public List<GameObject> lugares;
-    private Dictionary<int, string> periodToLocation = new Dictionary<int, string>();
-
-    public int Age = 75;
-    public enum Gender { Male, Female, Neutro }
-    public enum Money { Poor, Medium, Rich }
-    public enum Persona { Grumpy, Shy, Kind, Flirty, Sado, Loud }
-    public enum Race { Dog, Elemental, Boto, Human}
-    public float Humor;
-    public Gender gender;
-    public Money money;
-    public Persona persona;
-    public Race race;
 
 //----------------------------------------------------
 

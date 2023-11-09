@@ -94,20 +94,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2502955719447173112}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4d488402f4e9484e853f33674498cff, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ebf89102032fe047a07412a9f2af65e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0
-  targetPosition: {x: 0, y: 0, z: 0}
-  gamemanager: {fileID: 0}
-  lugares:
-  - {fileID: 0}
-  Age: 75
-  Humor: -1
   gender: 0
+  age: 53
+  race: 0
   money: 2
+  humor: 0
   persona: 0
-  race: 3
+  moveSpeed: 1
+  drunk: 0
 --- !u!58 &2907002565202611611
 CircleCollider2D:
   m_ObjectHideFlags: 0
