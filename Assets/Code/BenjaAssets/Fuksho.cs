@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Char_Fuksho : CharBase
+public class Fuksho : CharBase
 {
     private Dictionary<int, string> periodToLocation = new Dictionary<int, string>();
     private Vector3 targetPosition;
@@ -41,6 +41,11 @@ public class Char_Fuksho : CharBase
             {
                 //Aqui pode acessar as variaveis unicas daquele npc
             }
+            //if (collision.TryGetComponent<Mandreed>(out Mandreed planta))
+            //{
+            //    humor+=1;
+            //    persona=PersonalityT.Loud;  
+            //}
             // Colocar apos o {} "else"
             else if (collision.TryGetComponent<CharBase>(out CharBase charBase))
             {
@@ -57,24 +62,26 @@ public class Char_Fuksho : CharBase
             switch (collision.gameObject.name)
             {
                 case "TownSquare":
+                    persona = PersonalityT.Loud;
                     money = MoneyT.Rich;
                     break;
                 case "Bakery":
-
+                    persona=PersonalityT.Kind;
+                    money=MoneyT.Medium;
                     break;
                 case "Bar":
-                if(PersonalityT.Loud || PersonalityT.Grumpy)
-                    //Caso o npc estiver no bar, ele ficara pobre e tera seu humor restaurado ao valor maximo
-                    {
-                        money = MoneyT.Poor;
-                        humor = 3;
-                    }
+                
+                    //Caso o npc estiver no bar, ele ficara pobre e tera seu humor restaurado ao valor maximo 
+                    persona = PersonalityT.Loud;   
+                    money = MoneyT.Poor;
+                    humor = 3;
                     break;
                 case "Library":
                     //Caso o npc estiver na biblioteca o npc ficara timido
                     persona = PersonalityT.Shy;
                     break;
                 case "Hospital":
+                    persona=PersonalityT.Kind;
                     break;
                 case "?":
 
@@ -94,8 +101,12 @@ public class Char_Fuksho : CharBase
         //Voce devera usar a funcao AdicionarARotina, nela dentro dos () primeiro colocaremos o horario e apos a virgula o local que vamos ir entre ""
         AdicionarARotina(0, "TownSquare");
         //Nesse caso o jogador esta indo a TownSquare no momento 0
-        AdicionarARotina(1, "Hospital");
+        //AdicionarARotina(1, "Hospital");
         //E indo ao hospital no momento 1
+        AdicionarARotina(3, "Bar");
+        AdicionarARotina(4, "TownSquare");
+        AdicionarARotina(6, "Library");
+        AdicionarARotina(7, "TownSquare");
         //PS: Um pouco acima tem uma lista de todas localizacoes presentes no mapa
 
         //Nao mexer na linha a baixo 
@@ -117,7 +128,16 @@ public class Char_Fuksho : CharBase
         //Vamos fazer um exemplo que o nosso personagem se o outro for da personalidade "Loud" ele ira perder humor
         if (charInfo.Persona == PersonalityT.Loud)
         {
-            humor -= 1;
+            humor += 1;
+        }
+        if(charInfo.Money == MoneyT.Rich)
+        {
+            persona=PersonalityT.Kind;
+            humor+=2;
+        }
+        if(charInfo.Persona==PersonalityT.Sadistic)
+        {
+            humor-=2;
         }
 
     }
