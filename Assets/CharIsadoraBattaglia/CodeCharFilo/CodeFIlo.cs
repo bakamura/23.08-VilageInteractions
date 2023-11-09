@@ -31,16 +31,57 @@ public class CodeFilo : CharBase
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        //Nao mexer nessa funcao ate a implementacao de interacoes especificas com alguns personagens
+
         if (collision.gameObject.tag == "Char")
         {
-            if (collision.TryGetComponent<CharBase>(out CharBase charBase))
+            //Para colocar uma interacao especifica entre alguns personagens
+            //Use o modelo a baixo
+            // if (collision.TryGetComponent<"Nome da classe do outro npc especifico">(out "Nome da classe do outro npc especifico" "Como vc pretende chamar a classe desse npc"))
+            if (collision.TryGetComponent<CharTemplate>(out CharTemplate charTemplate))
+            {
+                //Aqui pode acessar as variaveis unicas daquele npc
+            }
+            // Colocar apos o {} "else"
+            else if (collision.TryGetComponent<CharBase>(out CharBase charBase))
             {
                 charBase.Interact(this);
             }
             else
             {
                 Debug.Log("Erro em pegar informacoes de" + collision.gameObject.name);
+            }
+        }
+        else
+        {
+            switch (collision.gameObject.name)
+            {
+                case "TownSquare":
+                    humor += 3;
+                    persona = PersonalityT.Loud;
+                    Playfull = 1;
+                    break;
+
+                case "Bakery":
+                    persona = PersonalityT.Shy;
+                    break;
+
+                case "Bar":
+                    humor -= 2;
+                    Sad += 0.75f;
+                    break;
+
+                case "Library":
+                    Sleepy += 3;
+                    break;
+
+                case "Hospital":
+                    persona = PersonalityT.Shy;
+                    Sad += 2;
+                    break;
+
+                case "?":
+
+                    break;
             }
         }
     }
@@ -56,25 +97,48 @@ public class CodeFilo : CharBase
         targetPosition = transform.position;
         GameManager.onChangePeriod.AddListener(OnChangePeriod);
     }
-    //colocar açoes e personalidades especificas da filo: playful, sweet, bite, pee.
+    //colocar açoes e personalidades especificas da filo: playful, sleepy, afraid, Angry e Sad;
+    [Range(-1, 1)] public int Playfull;
+    [Range(-3, 3)] public float Sleepy;
+    [Range(-3, 3)] public float Afraid;
+    [Range(-3, 3)] public float Angry;
+    [Range(-3, 3)] public float Sad;
     public override void Interact(CharBase charInfo)
     {
         switch (charInfo.Persona)
         {
             case PersonalityT.Shy:
                 humor += 1;
+                Playfull = 0;
+                Sleepy += 1.5f;
+                persona = PersonalityT.Shy;
+                moveSpeed -= 0.5f;
                 break;
 
             case PersonalityT.Grumpy:
                 humor -= 1;
+                Playfull = -1;
+                Afraid += 0.5f;
+                persona = PersonalityT.Grumpy;
                 break;
 
             case PersonalityT.Kind:
                 humor += 2;
+                Afraid -= 1.25f;
                 break;
 
             case PersonalityT.Sadistic:
                 humor -= 2;
+                Afraid += 1.5f;
+                Angry += 0.5f;
+                persona = PersonalityT.Grumpy;
+                moveSpeed += 1.5f;
+                break;
+
+            case PersonalityT.Loud:
+                Sleepy -= 2.5f;
+                Playfull = 1;
+                persona = PersonalityT.Loud;
                 break;
         }
 
@@ -86,10 +150,14 @@ public class CodeFilo : CharBase
 
             case RaceT.Animal:
                 humor += 2;
+                Playfull = 1;
+                persona = PersonalityT.Loud;
                 break;
 
             case RaceT.Spirit:
                 humor -= 1;
+                Afraid += 1;
+                moveSpeed += 1.25f;
                 break;
 
             case RaceT.NonHuman:
@@ -97,6 +165,29 @@ public class CodeFilo : CharBase
                 break;
         }
 
+        if (charInfo.Age <= 18)
+        {
+            humor += 2.5f;
+            Playfull = 1;
+            moveSpeed = 0.5f;
+            persona = PersonalityT.Loud;
+        }
+        else if (charInfo.Age >= 19 && charInfo.Age <= 35)
+        {
+            humor += 1;
+        }
+        else
+        {
+
+        }
+
+
+        switch (persona)
+        {
+            case PersonalityT.Grumpy:
+
+                break;
+        }
 
     }
 

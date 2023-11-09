@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2423278867385057310}
   - component: {fileID: 2423278867385057309}
-  - component: {fileID: 5777537687903056051}
+  - component: {fileID: 1009309449474814373}
   - component: {fileID: 2423278867385057379}
   - component: {fileID: 2423278867385057311}
   m_Layer: 0
@@ -85,7 +85,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5777537687903056051
+--- !u!114 &1009309449474814373
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,13 +97,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ad96c854f0a84b4db1b9500b58cf127, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gender: 0
-  age: 0
-  race: 0
+  gender: 1
+  age: 5
+  race: 1
   money: 0
-  humor: 0
-  persona: 0
-  moveSpeed: 1
+  humor: 1
+  persona: 4
+  moveSpeed: 5
+  Playfull: 0
+  Sleepy: 0
+  Afraid: 0
+  Angry: 0
+  Sad: 0
 --- !u!58 &2423278867385057379
 CircleCollider2D:
   m_ObjectHideFlags: 0
