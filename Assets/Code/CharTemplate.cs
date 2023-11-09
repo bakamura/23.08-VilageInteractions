@@ -11,7 +11,7 @@ public class CharTemplate : CharBase
     private void Update()
     {
         //Nao precisa mexer
-        transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed/10 * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed / 10 * Time.deltaTime);
     }
     private void AdicionarARotina(int periodoDoDia, string lugar)
     {
@@ -32,7 +32,12 @@ public class CharTemplate : CharBase
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        //Nao mexer nessa funcao ate a implementacao de interacoes especificas com alguns personagens
+        //Para colocar uma interacao especifica entre alguns personagens
+        //Use o modelo a baixo
+        // if (collision.TryGetComponent<"Nome da classe do outro npc especifico">(out "Nome da classe do outro npc especifico" "Como vc pretende chamar a classe desse npc"))
+        //Exemplo:
+        //if (collision.TryGetComponent<CharTemplate>(out CharTemplate charTemplate))
+        //Lembrar de colocar o else apos o } se tiver um if apos
         if (collision.gameObject.tag == "Char")
         {
             if (collision.TryGetComponent<CharBase>(out CharBase charBase))
@@ -42,6 +47,25 @@ public class CharTemplate : CharBase
             else
             {
                 Debug.Log("Erro em pegar informacoes de" + collision.gameObject.name);
+            }
+        }
+        else
+        {
+            //Reacao do npc baseado na posicao de mundo
+            switch (collision.gameObject.name)
+            {
+                case "TownSquare":
+                    break;
+                case "Bakery":
+                    break;
+                case "Bar":
+                    break;
+                case "Library":
+                    break;
+                case "Hospital":
+                    break;
+                case "?":
+                    break;
             }
         }
     }
