@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Fuksho : CharBase
+public class Char_Fuksho : CharBase
 {
     private Dictionary<int, string> periodToLocation = new Dictionary<int, string>();
     private Vector3 targetPosition;
@@ -34,6 +34,7 @@ public class Fuksho : CharBase
 
         if (collision.gameObject.tag == "Char")
         {
+            
             //Para colocar uma interacao especifica entre alguns personagens
             //Use o modelo a baixo
             // if (collision.TryGetComponent<"Nome da classe do outro npc especifico">(out "Nome da classe do outro npc especifico" "Como vc pretende chamar a classe desse npc"))
