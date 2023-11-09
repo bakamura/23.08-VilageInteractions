@@ -1,7 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static CharBase;
 
+[Serializable]
+public struct IdentityStats
+{
+    public GenderT realGender;
+    public uint realAge;
+    public RaceT realRace;
+    public MoneyT realMoney;
+    [Range(-3, 3)] public float realHumor;
+    public PersonalityT realPersona;
+}
 public class CharMori : CharBase
 {
     private Dictionary<int, string> periodToLocation = new Dictionary<int, string>();
@@ -33,48 +45,23 @@ public class CharMori : CharBase
     [Range(0, 10)] public int socialMaskingEnergy = 10;
     readonly private int maxSocialMaskingEnergyCount = 10;
 
-    private enum Identity
+    public enum Identity
     {
         ShyKid,
         CrazyWoman,
         AngryOldMan
     }
-    private Identity currentIdentity;
-
-    [Header("-----Real Values-----"), Space]
-    [Header("-----Personality Shy Kid-----")]
-    public GenderT realShyGender;
-    public uint realShyAge;
-    public RaceT realShyRace;
-    public MoneyT realShyMoney;
-    [Range(-3, 3)] public float realShyHumor;
-    public PersonalityT realShyPersona;
-
-    [Header("-----Personality Crazy Woman-----")]
-    public GenderT realCrazyGender;
-    public uint realCrazyAge;
-    public RaceT realCrazyRace;
-    public MoneyT realCrazyMoney;
-    [Range(-3, 3)] public float realCrazyHumor;
-    public PersonalityT realCrazyPersona;
-
-    [Header("-----Personality Angry Old Guy-----")]
-    public GenderT realAngryGender;
-    public uint realAngryAge;
-    public RaceT realAngryRace;
-    public MoneyT realAngryMoney;
-    [Range(-3, 3)] public float realAngryHumor;
-    public PersonalityT realAngryPersona;
+    public Identity currentIdentity;
+    [Header("-----Identity Values-----"), Space]
+    public IdentityStats shyKidStats;
+    public IdentityStats crazyWomanStats;
+    public IdentityStats angryOldManStats;
 
     [Header("-----Fake Values-----"), Space]
-    public GenderT fakeGender;
-    public uint fakeAge;
-    public RaceT fakeRace;
-    public MoneyT fakeMoney;
-    [Range(-3, 3)] public float fakeHumor;
-    public PersonalityT fakePersona;
+    public IdentityStats fakeStats;
 
-
+    [Header("-----Final Values-----"), Space]
+    IdentityStats finalStats;
 
     [HideInInspector] public SpriteRenderer spriteRenderer;
     public void OnTriggerEnter2D(Collider2D collision)
@@ -93,41 +80,24 @@ public class CharMori : CharBase
         }
     }
 
-    public void GetRealCurrentIdentity(out GenderT realGender, out uint realAge, out RaceT realRace, out MoneyT realMoney, out float realHumor, out PersonalityT realPersona)
+    public ref IdentityStats GetCurrentIdentityStats()
     {
         switch (currentIdentity)
         {
             case Identity.ShyKid:
             default:
-                realGender = realShyGender;
-                realAge = realShyAge;
-                realRace = realShyRace;
-                realMoney = realShyMoney;
-                realHumor = realShyHumor;
-                realPersona = realShyPersona;
-                break;
+                return ref shyKidStats;
             case Identity.CrazyWoman:
-                realGender = realCrazyGender;
-                realAge = realCrazyAge;
-                realRace = realCrazyRace;
-                realMoney = realCrazyMoney;
-                realHumor = realCrazyHumor;
-                realPersona = realCrazyPersona;
-                break;
+                return ref crazyWomanStats;
             case Identity.AngryOldMan:
-                realGender = realAngryGender;
-                realAge = realAngryAge;
-                realRace = realAngryRace;
-                realMoney = realAngryMoney;
-                realHumor = realAngryHumor;
-                realPersona = realAngryPersona;
-                break;
+                return ref angryOldManStats;
         }
     }
 
     void Start()
     {
-        currentIdentity = (Identity)Random.Range(0, 2);
+        currentIdentity = (Identity)UnityEngine.Random.Range(0, 2);
+        finalStats = GetCurrentIdentityStats();
         //Nao mexer na linha a baixo
         targetPosition = transform.position;
         GameManager.onChangePeriod.AddListener(OnChangePeriod);
@@ -145,10 +115,10 @@ public class CharMori : CharBase
 
     public void ReactToOtherNpc(CharBase charInfo)
     {
-        switch(currentIdentity)
+        switch (currentIdentity)
         {
             case Identity.ShyKid:
-                switch(charInfo.Persona)
+                switch (charInfo.Persona)
                 {
                     case PersonalityT.Kind:
                     case PersonalityT.Shy:
