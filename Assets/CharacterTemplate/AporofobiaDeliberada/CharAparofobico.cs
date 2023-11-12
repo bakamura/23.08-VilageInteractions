@@ -14,7 +14,12 @@ public class CharAparofobico : CharBase
     }
     private void AdicionarARotina(int periodoDoDia, string lugar)
     {
-        periodToLocation.Add(periodoDoDia, lugar);
+        periodToLocation.Add(1, "TownSquare");
+        periodToLocation.Add(2, "Bar");
+        periodToLocation.Add(3, "Bar");
+        periodToLocation.Add(4, "Bar");
+        periodToLocation.Add(5, "Bakery");
+        periodToLocation.Add(6, "Bakery");
     }
 
     //Para implementacao simples mexer apenas a baixo
@@ -53,8 +58,69 @@ public class CharAparofobico : CharBase
     }
     public override void Interact(CharBase charInfo)
     {
+        if (charInfo.Money == MoneyT.Poor)
+        {
+            Debug.Log("Evitando interação com pessoa pobre.");
+
+            // Afasta o personagem 
+            Vector3 direction = transform.position - charInfo.transform.position;
+            Vector3 newPosition = transform.position + direction.normalized * 2f;  
+
+           
+            targetPosition = newPosition;
+        }
+        // Verifica se a pessoa é "rica" antes de interagir
+        else if (charInfo.Money == MoneyT.Rich)
+        {
+            Debug.Log("Aproximando-se de pessoa rica.");
+
+            // Aproxima o personagem ao detectar uma pessoa rica
+            Vector3 direction = charInfo.transform.position - transform.position;
+            Vector3 newPosition = transform.position + direction.normalized * 2f;  // Ajuste a magnitude conforme necessário
+
+            // Atualiza a posição do personagem
+            targetPosition = newPosition;
+        }
+        switch (charInfo.Persona)
+        {
+            case PersonalityT.Sadistic:
+                humor -= 1;
+
+                break;
+
+            case PersonalityT.Grumpy:
+                humor += 1;
+
+                break;
+
+            case PersonalityT.Loud:
+                humor += 2;
+
+                break;
+
+            case PersonalityT.Shy:
+                humor += 2;
+
+                break;
+
+            case PersonalityT.Kind:
+                humor -= 1;
+
+                break;
+
+            case PersonalityT.Flirty:
+                humor -= 1;
+
+                break;
+
+            default:
+           
+                break;
+        }
 
     }
+
+
 
     public void OnChangePeriod(int periodo)
     {
