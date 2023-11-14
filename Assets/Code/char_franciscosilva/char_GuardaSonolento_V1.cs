@@ -29,13 +29,6 @@ public class char_GuardaSonolento_V1 : CharBase
     ?
     */
 
-    private void FixedUpdate()
-    {
-        if (tired == 3)
-        {
-        targetPosition = collision.gameObject.name.TownSquare;
-        }
-    }
 
     [SerializeField, Range(-3, 3)] protected float tired;
     public float Tired { get { return tired; } }
@@ -98,7 +91,7 @@ public class char_GuardaSonolento_V1 : CharBase
     }
     public override void Interact(CharBase charInfo)
     {
-        if (charInfo.gender == GenderT.Female)
+        if (charInfo.Gender == GenderT.Female)
         {
             persona = PersonalityT.Shy;
         } 
@@ -122,18 +115,7 @@ public class char_GuardaSonolento_V1 : CharBase
             case PersonalityT.Loud:
             humor -= 2;
             tired -= 1;
-                if (humor < -1) 
-                {
-                    persona = PersonalityT.Loud;
-                }
-                if (charInfo.targetPosition == GameObject.Find("Library").transform.position)
-                {
-                    targetPosition = GameObject.Find("?").transform.position;
-                }
-                else
-                {
-                    targetPosition = GameObject.Find("Library").transform.position;
-                }
+            targetPosition = GameObject.Find("Library").transform.position;
             break;
             //se encontrar com algm Loud, o guarda tentará fugir em direção à biblioteca. se o humor estiver abaixo de -1, ele se torna Loud.
         }
@@ -148,7 +130,11 @@ public class char_GuardaSonolento_V1 : CharBase
         {
             Vector3 locationObject = GameManager._placePosition[periodToLocation[periodo]];
 
-            if (locationObject != null)
+            if (tired == 3)
+            {
+                targetPosition = GameObject.Find("TownSquare").transform.position;
+            }
+            else if (locationObject != null)
             {
                 targetPosition = locationObject;
             }
