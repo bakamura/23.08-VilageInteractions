@@ -77,6 +77,9 @@ public class CharExample : CharBase
                 case "?":
 
                     break;
+                case "casa":
+
+                    break;
             }
         }
     }
@@ -90,9 +93,9 @@ public class CharExample : CharBase
         //Exemplo de adicionar um local a sua rotina
 
         //Voce devera usar a funcao AdicionarARotina, nela dentro dos () primeiro colocaremos o horario e apos a virgula o local que vamos ir entre ""
-        AdicionarARotina(0, "TownSquare");
+        AdicionarARotina(0, "casa");
         //Nesse caso o jogador esta indo a TownSquare no momento 0
-        AdicionarARotina(1, "Hospital");
+        AdicionarARotina(2, "Bakery");
         //E indo ao hospital no momento 1
         //PS: Um pouco acima tem uma lista de todas localizacoes presentes no mapa
 
