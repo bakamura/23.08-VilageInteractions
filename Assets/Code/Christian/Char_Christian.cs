@@ -55,14 +55,42 @@ public class Char_Christian : CharBase
             switch (collision.gameObject.name)
             {
                 case "TownSquare":
+
+                    if (persona == PersonalityT.Flirty)
+                    {
+                        targetPosition = GameObject.Find("TownSquare").transform.position;
+                    }
+
                     break;
                 case "Bakery":
+
+                    if (persona == PersonalityT.Loud)
+                    {
+                        targetPosition = GameObject.Find("Bakery").transform.position;
+                    }
+
                     break;
                 case "Bar":
+
+                    if (persona == PersonalityT.Grumpy || persona == PersonalityT.Sadistic)
+                    {
+                        targetPosition = GameObject.Find("Bar").transform.position;
+                    }
+
                     break;
                 case "Library":
+
+                    if (persona == PersonalityT.Shy)
+                    {
+                        targetPosition = GameObject.Find("Library").transform.position;
+                    }
+
                     break;
                 case "Hospital":
+                    if (persona == PersonalityT.Kind)
+                    {
+                        targetPosition = GameObject.Find("Hospital").transform.position;
+                    }
                     break;
                 case "?":
                     break;
@@ -90,16 +118,25 @@ public class Char_Christian : CharBase
         {
             humor = 0;
         }
-
+        
         switch (charInfo.Money)
         {
 
 
             case MoneyT.Poor:
 
-                humor -= 2;
+                if (drunk > 0)
+                {
+                    persona = PersonalityT.Kind;
+                    humor++;
+                }
+                else
+                {
 
-                persona = PersonalityT.Sadistic;
+                    humor -= 2;
+
+                    persona = PersonalityT.Sadistic;
+                }
                 break;
 
             case MoneyT.Medium:
@@ -108,12 +145,21 @@ public class Char_Christian : CharBase
                 {
 
                     money = MoneyT.Rich;
+                    humor++;
                 }
                 else if (persona == PersonalityT.Grumpy || persona == PersonalityT.Sadistic)
                 {
-                    humor--;
-                    //charInfo.Money = MoneyT.Poor;
-                    money = MoneyT.Rich;
+                    if (drunk > 0)
+                    {
+                        persona = PersonalityT.Kind;
+                        humor++;
+                    }
+                    else
+                    {
+                        humor--;
+                        //charInfo.Money = MoneyT.Poor;
+                        money = MoneyT.Rich;
+                    }
                 }
                 else
                 {
@@ -126,9 +172,17 @@ public class Char_Christian : CharBase
             case MoneyT.Rich:
                 if (persona == PersonalityT.Grumpy || persona == PersonalityT.Sadistic)
                 {
+                    if (drunk>0)
+                    {
+                        persona = PersonalityT.Kind;
+                        humor++;
+                    }
+                    else
+                    { 
                     humor--;
                     //charInfo.money = Money.Medium;
                     money = MoneyT.Rich;
+                    }
                 }
                 else
                 {
@@ -145,19 +199,40 @@ public class Char_Christian : CharBase
 
             case PersonalityT.Loud:
 
+                if (drunk > 0)
+                {
+                    persona = PersonalityT.Kind;
+                }
+                else
+                {
                 persona = PersonalityT.Grumpy;
-
+                }
                 break;
 
             case PersonalityT.Shy:
 
-                persona = PersonalityT.Sadistic;
+                if (drunk > 0)
+                {
+                    persona = PersonalityT.Kind;
+                }
+                else
+                {
+                    persona = PersonalityT.Sadistic;
+                }
 
                 break;
 
             case PersonalityT.Sadistic:
 
-                persona = PersonalityT.Flirty;
+                if (drunk > 0)
+                {
+                    persona = PersonalityT.Kind;
+                }
+                else
+                {
+
+                    persona = PersonalityT.Flirty;
+                }
 
                 break;
 
@@ -188,26 +263,44 @@ public class Char_Christian : CharBase
 
             case RaceT.Human:
 
-                if (persona == PersonalityT.Grumpy || persona == PersonalityT.Sadistic || persona == PersonalityT.Loud)
+                if (drunk > 0)
                 {
-                    humor--;
-                }
-                else if (persona == PersonalityT.Flirty)
-                {
+                    persona = PersonalityT.Kind;
                     humor++;
+                }
+                else
+                {
+
+                    if (persona == PersonalityT.Grumpy || persona == PersonalityT.Sadistic || persona == PersonalityT.Loud)
+                    {
+                        humor--;
+                    }
+                    else if (persona == PersonalityT.Flirty)
+                    {
+                        humor++;
+                    }
                 }
 
                 break;
 
             case RaceT.NonHuman:
 
-                if (persona == PersonalityT.Kind || persona == PersonalityT.Flirty)
+                if (drunk > 0)
                 {
+                    persona = PersonalityT.Kind;
                     humor++;
                 }
-                else if ( persona == PersonalityT.Grumpy || persona == PersonalityT.Sadistic)
+                else
                 {
-                    humor--;
+
+                    if (persona == PersonalityT.Kind || persona == PersonalityT.Flirty)
+                    {
+                        humor++;
+                    }
+                    else if (persona == PersonalityT.Grumpy || persona == PersonalityT.Sadistic)
+                    {
+                        humor--;
+                    }
                 }
                 break;
 

@@ -101,7 +101,7 @@ MonoBehaviour:
   age: 53
   race: 0
   money: 2
-  humor: 0
+  humor: -1
   persona: 0
   moveSpeed: 1
   drunk: 0
