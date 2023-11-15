@@ -749,9 +749,9 @@ MonoBehaviour:
   gender: 0
   age: 32
   race: 0
-  money: 0
+  money: 1
   humor: 2.01
-  persona: 1
+  persona: 3
   moveSpeed: 10
 --- !u!1 &1338097158
 GameObject:
