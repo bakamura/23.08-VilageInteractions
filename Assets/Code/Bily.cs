@@ -75,13 +75,13 @@ public class Bily : CharBase
     void Start()
     {
 
-        AdicionarARotina(0, "");
-        AdicionarARotina(1, "");
-        AdicionarARotina(2, "");
-        AdicionarARotina(3, "");
-        AdicionarARotina(4, "");
-        AdicionarARotina(5, "");
-        AdicionarARotina(6, "");
+        AdicionarARotina(0, "Bakery");
+        AdicionarARotina(1, "TownSquare");
+        AdicionarARotina(2, "Bar");
+        AdicionarARotina(3, "TownSquare");
+        AdicionarARotina(4, "Bakery");
+        AdicionarARotina(5, "Library");
+        AdicionarARotina(6, "TownSquare");
 
 
 
