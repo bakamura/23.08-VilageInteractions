@@ -80,6 +80,14 @@ public class CharExample : CharBase
                 case "casa":
 
                     break;
+
+                    break;
+                case "garagem":
+                    persona = PersonalityT.Loud;
+                    money = MoneyT.Medium;
+                    humor = 1;
+
+                    break;
             }
         }
     }
@@ -95,9 +103,13 @@ public class CharExample : CharBase
         //Voce devera usar a funcao AdicionarARotina, nela dentro dos () primeiro colocaremos o horario e apos a virgula o local que vamos ir entre ""
         AdicionarARotina(0, "casa");
         //Nesse caso o jogador esta indo a TownSquare no momento 0
-        AdicionarARotina(2, "Bakery");
+        AdicionarARotina(1, "Bakery");
         //E indo ao hospital no momento 1
+        AdicionarARotina(2, "garagem");
+        AdicionarARotina(5, "Bar");
+        AdicionarARotina(6, "casa");
         //PS: Um pouco acima tem uma lista de todas localizacoes presentes no mapa
+
 
         //Nao mexer na linha a baixo 
         targetPosition = transform.position;
