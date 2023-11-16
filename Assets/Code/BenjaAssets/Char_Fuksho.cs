@@ -47,6 +47,11 @@ public class Char_Fuksho : CharBase
             //    humor+=1;
             //    persona=PersonalityT.Loud;  
             //}
+            //if (collision.TryGetComponent<player>(out Player player))
+            //{
+            //    humor+=1;
+            //    persona=PersonalityT.Loud;  
+            //}
             // Colocar apos o {} "else"
             else if (collision.TryGetComponent<CharBase>(out CharBase charBase))
             {
@@ -73,7 +78,6 @@ public class Char_Fuksho : CharBase
                     humor+=.5f;
                     break;
                 case "Bar":
-                
                     //Caso o npc estiver no bar, ele ficara pobre e tera seu humor restaurado ao valor maximo 
                     persona = PersonalityT.Loud;   
                     money = MoneyT.Poor;
