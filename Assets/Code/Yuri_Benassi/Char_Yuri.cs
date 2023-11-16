@@ -59,21 +59,68 @@ public class Char_Yuri : CharBase
             {
                 case "TownSquare":
 
+                    if (lobisomem > 0)
+                    {
+                        persona = PersonalityT.Loud;
+                        money--;
+                    }
+                    else
+                    {
+                        persona = PersonalityT.Kind;
+                        money++;
+                    }
                     break;
+
                 case "Bakery":
 
-                    break;
-                case "Bar":
-                    //Caso o npc estiver no bar, ele ficara pobre e tera seu humor restaurado ao valor maximo
                     money = MoneyT.Poor;
-                    humor = 3;
+                    if (lobisomem > 0)
+                    {
+                        persona = PersonalityT.Loud;
+                    }
+                    else
+                    {
+                        persona = PersonalityT.Shy;
+                    }
                     break;
+
+                case "Bar":
+
+                    money = MoneyT.Poor;
+                    if (lobisomem > 0)
+                    {
+                        persona = PersonalityT.Grumpy;
+                    }
+                    else
+                    {
+                        persona = PersonalityT.Kind;
+                    }
+                    break;
+
                 case "Library":
-                    //Caso o npc estiver na biblioteca o npc ficara timido
-                    persona = PersonalityT.Shy;
+
+                    if (lobisomem > 0)
+                    {
+                        persona = PersonalityT.Sadistic;
+                    }
+                    else
+                    {
+                        persona = PersonalityT.Shy;
+                    }
                     break;
+
                 case "Hospital":
+
+                    if (lobisomem > 0)
+                    {
+                        persona = PersonalityT.Grumpy;
+                    }
+                    else
+                    {
+                        persona = PersonalityT.Shy;
+                    }
                     break;
+
                 case "?":
 
                     break;
@@ -82,19 +129,13 @@ public class Char_Yuri : CharBase
     }
     void Start()
     {
-        //A rotina no caso atual q trabalharemos sera segmentada em 7 momentos diferentes sendo eles do tempo 0 ao 6
-        //Sabendo q o dia eh dividido nos horarios de 0 a 6
-        //Vamos fazer um exemplo que o jogador deve estar na TownSquare as 0
-        //E as 1 deve estar indo ao Hospital
-
-        //Exemplo de adicionar um local a sua rotina
-
-        //Voce devera usar a funcao AdicionarARotina, nela dentro dos () primeiro colocaremos o horario e apos a virgula o local que vamos ir entre ""
-        AdicionarARotina(0, "TownSquare");
-        //Nesse caso o jogador esta indo a TownSquare no momento 0
-        AdicionarARotina(1, "Hospital");
-        //E indo ao hospital no momento 1
-        //PS: Um pouco acima tem uma lista de todas localizacoes presentes no mapa
+        AdicionarARotina(0, "Bakery");
+        AdicionarARotina(1, "TownSquare");
+        AdicionarARotina(2, "TownSquare");
+        AdicionarARotina(3, "Hospital");
+        AdicionarARotina(4, "TownSquare");
+        AdicionarARotina(5, "Library");
+        AdicionarARotina(6, "Bar");
 
         //Nao mexer na linha a baixo 
         targetPosition = transform.position;
@@ -102,17 +143,6 @@ public class Char_Yuri : CharBase
     }
     public override void Interact(CharBase charInfo)
     {
-        //Para interagirmos com outro personagem usaremos essa funcao
-        //Nela poderemos mudar tanto as variaveis do seu personagem quanto a do seu colega
-        //Essa funcao sera executada apos seu personagem chegar proximo a outro
-
-        //Para usarmos ela temos q entender uma divisao, de como iremos diferenciar o seu personagem do personagem do seu colega
-        //As informacoes do seu personagem sempre serao escritas desta forma : a informacao q vc deseja acessar em minusculo
-        //humor;
-        //As informacoes do outro personagem sempre serao escritas desta forma: charInfo. e a informacao q vc deseja com a primeira letra em maisculo
-        //charInfo.Humor;
-
-        //Vamos fazer um exemplo que o nosso personagem se o outro for da personalidade "Loud" ele ira perder humor
         switch (charInfo.Persona)
         {
             case PersonalityT.Loud:
@@ -209,6 +239,34 @@ public class Char_Yuri : CharBase
                 {
                     persona = PersonalityT.Grumpy;
                     humor--;
+                }
+                else
+                {
+                    persona = PersonalityT.Shy;
+                    humor++;
+                }
+                break;
+
+            case RaceT.Spirit:
+
+                if (lobisomem > 0)
+                {
+                    persona = PersonalityT.Kind;
+                    humor++;
+                }
+                else
+                {
+                    persona = PersonalityT.Sadistic;
+                    humor--;
+                }
+                break;
+
+            case RaceT.NonHuman:
+
+                if (lobisomem > 0)
+                {
+                    persona = PersonalityT.Kind;
+                    humor++;
                 }
                 else
                 {
