@@ -32,16 +32,51 @@ public class CharExample : CharBase
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        //Nao mexer nessa funcao ate a implementacao de interacoes especificas com alguns personagens
+
         if (collision.gameObject.tag == "Char")
         {
-            if (collision.TryGetComponent<CharBase>(out CharBase charBase))
+            //Para colocar uma interacao especifica entre alguns personagens
+            //Use o modelo a baixo
+            // if (collision.TryGetComponent<"Nome da classe do outro npc especifico">(out "Nome da classe do outro npc especifico" "Como vc pretende chamar a classe desse npc"))
+            if (collision.TryGetComponent<CharTemplate>(out CharTemplate charTemplate))
+            {
+                //Aqui pode acessar as variaveis unicas daquele npc
+            }
+            // Colocar apos o {} "else"
+            else if (collision.TryGetComponent<CharBase>(out CharBase charBase))
             {
                 charBase.Interact(this);
             }
             else
             {
                 Debug.Log("Erro em pegar informacoes de" + collision.gameObject.name);
+            }
+        }
+        else
+        {
+            //Reacao do npc baseado na posicao de mundo
+            switch (collision.gameObject.name)
+            {
+                case "TownSquare":
+
+                    break;
+                case "Bakery":
+
+                    break;
+                case "Bar":
+                    //Caso o npc estiver no bar, ele ficara pobre e tera seu humor restaurado ao valor maximo
+                    money = MoneyT.Poor;
+                    humor = 3;
+                    break;
+                case "Library":
+                    //Caso o npc estiver na biblioteca o npc ficara timido
+                    persona = PersonalityT.Shy;
+                    break;
+                case "Hospital":
+                    break;
+                case "?":
+
+                    break;
             }
         }
     }
@@ -78,7 +113,7 @@ public class CharExample : CharBase
         //charInfo.Humor;
 
         //Vamos fazer um exemplo que o nosso personagem se o outro for da personalidade "Loud" ele ira perder humor
-        if(charInfo.Persona == PersonalityT.Loud)
+        if (charInfo.Persona == PersonalityT.Loud)
         {
             humor -= 1;
         }
