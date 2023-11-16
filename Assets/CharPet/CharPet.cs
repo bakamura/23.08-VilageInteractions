@@ -13,16 +13,84 @@ public class CharPet : CharBase
 
     public SpriteRenderer DragRenderer;
     public Animator anim;
+    public float radius = 5f;
+    public Color HotColor = Color.magenta;
+    public Color ColdColor = Color.blue;
+    public Color defaultColor = Color.white;
+
+    public float currentHumor;
 
 
-    
+
     private void Update()
     {
         //Nao precisa mexer
         transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed/10 * Time.deltaTime);
 
-       
+        GetRandomColorFromHumor(currentHumor);
+
+        // Verifica se a distância entre a posição atual e a posição alvo é menor que uma pequena tolerância
+        if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
+        {
+            isMoving = true;
+            anim.Play("DragAndar");
+            Debug.Log("anda");
+        }
+        else
+        {
+            isMoving = false;
+            anim.Play("DragDancaAtraente");
+            Debug.Log("dance");
+        }
+
+        // Obtém a posição do collider do objeto
+        Vector3 objectPosition = transform.position;
+
+        // Encontra todas as sprites na cena
+        SpriteRenderer[] allSprites = FindObjectsOfType<SpriteRenderer>();
+
+        // Itera sobre todas as sprites e as retorna para a cor padrão se estiverem fora do raio original e não forem a DragRenderer
+        foreach (SpriteRenderer spriteRenderer in allSprites)
+        {
+            if (spriteRenderer != null && spriteRenderer != DragRenderer)
+            {
+                float distance = Vector3.Distance(spriteRenderer.transform.position, objectPosition);
+
+                if (distance <= radius)
+                {
+                    spriteRenderer.color = GetRandomColorFromHumor(currentHumor); // Usa o valor de currentHumor para obter a cor
+                }
+                else
+                {
+                    spriteRenderer.color = defaultColor;
+                }
+            }
+        }
+
+
     }
+
+    private Color GetRandomColorFromHumor(float humorValue)
+    {
+        Color coldColor = ColdColor;
+        Color hotColor = HotColor;
+
+        if (humorValue <= 0)
+        {
+            return coldColor;
+        }
+        else if (humorValue >= 1)
+        {
+            return hotColor;
+        }
+        else
+        {
+            // Interpolação linear entre as cores neutras
+            float t = (humorValue + 3f) / 6f; // Normaliza o valor entre 0 e 1
+            return Color.Lerp(coldColor, hotColor, t);
+        }
+    }
+
     private void AdicionarARotina(int periodoDoDia, string lugar)
     {
         periodToLocation.Add(periodoDoDia, lugar);
@@ -73,7 +141,11 @@ public class CharPet : CharBase
     }
     public override void Interact(CharBase charInfo)
     {
-        if(charInfo.Gender == GenderT.Male || charInfo.Gender == GenderT.Other)
+        currentHumor = charInfo.Humor;
+        Debug.Log("interação");
+
+
+        if (charInfo.Gender == GenderT.Male)
         {
             persona = PersonalityT.Flirty; 
         }
@@ -89,18 +161,17 @@ public class CharPet : CharBase
 
                 if (!isMoving)
                 {
-                    //Anim.Play("Dance");
+                    anim.Play("DragDancaAtraente");
                     DragRenderer.color = new Color(255, 255, 255, 255);
                 }
                 break;
 
             case PersonalityT.Flirty:
 
-                if (!isMoving)
-                {
+                
                     //Anim.Play("Dominatrix");
                     DragRenderer.color = new Color(202, 207, 50, 255);
-                }
+                
                 break;
         }
 
@@ -116,7 +187,7 @@ public class CharPet : CharBase
             case 3:
                 if (humor >= 3 && humor <= 0)
                 {
-                    persona = PersonalityT.Flirty;
+                    persona = PersonalityT.Loud;
                 }
                 break;
         }
@@ -145,10 +216,6 @@ public class CharPet : CharBase
                 transform.localScale -= new Vector3(1, 1, 1);
                 break;
         }
-
-
-
-  
         
     }
 
