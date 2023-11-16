@@ -53,6 +53,7 @@ public class CodeFilo : CharBase
         }
         else
         {
+            //Variações do eu personagem dentro de cada local da vila.
             switch (collision.gameObject.name)
             {
                 case "TownSquare":
@@ -80,13 +81,15 @@ public class CodeFilo : CharBase
                     break;
 
                 case "?":
-
+                    Confused += 3;
+                    humor -= 0.5f;
                     break;
             }
         }
     }
     void Start()
     {
+        //Rota e Rotina do meu personagem.
         AdicionarARotina(0, "Bakery");
         AdicionarARotina(2, "TownSquare");
         AdicionarARotina(4, "Bakery");
@@ -97,14 +100,18 @@ public class CodeFilo : CharBase
         targetPosition = transform.position;
         GameManager.onChangePeriod.AddListener(OnChangePeriod);
     }
-    //colocar açoes e personalidades especificas da filo: playful, sleepy, afraid, Angry e Sad;
+    //colocar açoes e personalidades especificas da filo: playful, sleepy, afraid, Angry, Sad e Confused.
+    [Header ("--------PersonalityT Values-------"),Space(1)]
     [Range(-1, 1)] public int Playfull;
     [Range(-3, 3)] public float Sleepy;
     [Range(-3, 3)] public float Afraid;
     [Range(-3, 3)] public float Angry;
     [Range(-3, 3)] public float Sad;
+    [Range(-3, 3)] public float Confused;
     public override void Interact(CharBase charInfo)
     {
+
+        //Variações do meu personagem ao interagir com pessoas com essas personalidaes.
         switch (charInfo.Persona)
         {
             case PersonalityT.Shy:
@@ -133,6 +140,7 @@ public class CodeFilo : CharBase
                 Angry += 0.5f;
                 persona = PersonalityT.Grumpy;
                 moveSpeed += 1.5f;
+                Confused += 1;
                 break;
 
             case PersonalityT.Loud:
@@ -142,6 +150,7 @@ public class CodeFilo : CharBase
                 break;
         }
 
+        //Variações do meu persoangem perante as raças dos outros personagens.
         switch (charInfo.Race)
         {
             case RaceT.Human:
@@ -165,27 +174,88 @@ public class CodeFilo : CharBase
                 break;
         }
 
+        //Variações do meu personagem perante a variação de idade de outras personagens.
         if (charInfo.Age <= 18)
         {
             humor += 2.5f;
             Playfull = 1;
-            moveSpeed = 0.5f;
+            moveSpeed += 0.5f;
             persona = PersonalityT.Loud;
         }
-        else if (charInfo.Age >= 19 && charInfo.Age <= 35)
+        else if (charInfo.Age <= 47)
         {
             humor += 1;
+            Playfull = 0;
+            moveSpeed += 1;
         }
         else
         {
-
+            moveSpeed -= 1;
+            Sleepy += 1.25f;
+            Playfull -= 1;
+            persona = PersonalityT.Shy;
         }
 
+        //Variações do meu persoangem perante as variações de Humor de outras personagens.
+        if (charInfo.Humor >= -3 && charInfo.Humor <= -1)
+        {
+            humor -= 0.5f;
+            Playfull = -1;
+            moveSpeed -= 0.75f;
+            persona = PersonalityT.Shy;
+            Sad += 0.5f;
+            Confused += 0.25f;
+        }
+        else if (charInfo.Humor <= 2)
+        {
+            humor += 1;
+            Playfull = 0;
+            moveSpeed += 0.5f;
+            persona = PersonalityT.Kind;
+            Sad -= 0.75f;
+        }
+        else
+        {
+            humor += 1.75f;
+            Playfull = 1;
+            moveSpeed += 1;
+            persona = PersonalityT.Loud;
+            Sad -= 1.25f;
+        }
 
+        //variações dentro das personalidades do meu personagem.
         switch (persona)
         {
             case PersonalityT.Grumpy:
+                Playfull = -1;
+                Angry += 1;
+                humor -= 0.75f;
+                Sad += 0.25f;
+                break;
 
+            case PersonalityT.Loud:
+                Playfull = +1;
+                Angry -= 2;
+                humor += 1.75f;
+                Sad -= 2;
+                moveSpeed += 1.25f;
+                break;
+
+            case PersonalityT.Shy:
+                Playfull = 0;
+                Sleepy += 0.25f;
+                humor = 0;
+                Afraid = 0.5f;
+                moveSpeed -= 1;
+                break;
+
+            case PersonalityT.Kind:
+                Playfull = +1;
+                Sleepy = 0.25f;
+                Afraid = -0.25f;
+                Angry = 0;
+                Sad = 0;
+                humor = 1;
                 break;
         }
 

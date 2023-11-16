@@ -104,11 +104,12 @@ MonoBehaviour:
   humor: 1
   persona: 4
   moveSpeed: 5
-  Playfull: 0
-  Sleepy: 0
-  Afraid: 0
-  Angry: 0
-  Sad: 0
+  Playfull: 1
+  Sleepy: -0.8
+  Afraid: -0.25
+  Angry: -1.25
+  Sad: -0.5
+  Confused: 0.5
 --- !u!58 &2423278867385057379
 CircleCollider2D:
   m_ObjectHideFlags: 0
