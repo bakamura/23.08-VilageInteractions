@@ -112,10 +112,10 @@ public class Char_Fuksho : CharBase
         //Nesse caso o jogador esta indo a TownSquare no momento 0
         //AdicionarARotina(1, "Hospital");
         //E indo ao hospital no momento 1
-        AdicionarARotina(3, "Bar");
-        AdicionarARotina(4, "TownSquare");
-        AdicionarARotina(6, "Library");
-        AdicionarARotina(7, "TownSquare");
+        AdicionarARotina(2, "Bar");
+        AdicionarARotina(3, "TownSquare");
+        AdicionarARotina(5, "Library");
+        AdicionarARotina(6, "TownSquare");
         //PS: Um pouco acima tem uma lista de todas localizacoes presentes no mapa
 
         //Nao mexer na linha a baixo 
