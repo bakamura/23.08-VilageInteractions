@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class CharTiagoYuki : CharBase
+public class CharTiagoYuki_0 : CharBase
 {
     private Dictionary<int, string> periodToLocation = new Dictionary<int, string>();
     private Vector3 targetPosition;
