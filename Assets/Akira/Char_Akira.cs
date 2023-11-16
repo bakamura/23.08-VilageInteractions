@@ -55,22 +55,43 @@ public class Char_Akira : CharBase
             switch (collision.gameObject.name)
             {
                 case "TownSquare":
+                    humor--;
                     break;
+
                 case "Bakery":
+                    humor = 0;
                     break;
+
                 case "Bar":
+                    humor++;
+                    money = MoneyT.Poor;
                     break;
+
                 case "Library":
+                    humor++;
+                    money = MoneyT.Rich;
                     break;
+
                 case "Hospital":
+                    humor--;
                     break;
+
                 case "?":
+
                     break;
             }
         }
     }
     void Start()
     {
+
+        AdicionarARotina(0, "Library");
+        AdicionarARotina(1, "Bakery");
+        AdicionarARotina(2, "Library");
+        AdicionarARotina(3, "Hospital");
+        AdicionarARotina(4, "Bar");
+        AdicionarARotina(5, "TownSquare");
+        AdicionarARotina(6, "Library");
 
         //Nao mexer na linha a baixo
         targetPosition = transform.position;
