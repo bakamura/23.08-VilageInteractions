@@ -77,11 +77,11 @@ public class Bily : CharBase
 
         AdicionarARotina(0, "Bakery");
         AdicionarARotina(1, "TownSquare");
-        AdicionarARotina(2, "Bar");
-        AdicionarARotina(3, "TownSquare");
-        AdicionarARotina(4, "Bakery");
-        AdicionarARotina(5, "Library");
-        AdicionarARotina(6, "TownSquare");
+        AdicionarARotina(2, "?");
+        AdicionarARotina(3, "Bar");
+        AdicionarARotina(4, "TownSquare");
+        AdicionarARotina(5, "Bakery");
+        AdicionarARotina(6, "?");
 
 
 
@@ -91,10 +91,28 @@ public class Bily : CharBase
     }
     public override void Interact(CharBase charInfo)
     {
-        if (charInfo.Money > MoneyT.Poor)
+        if (charInfo.Race == RaceT.Spirit)
+        {
+            persona = PersonalityT.Grumpy;
+            humor -= 1;
+        }
+        if (charInfo.Race == RaceT.Human)
+        {
+            persona = PersonalityT.Kind;
+            humor += 0.5f;
+
+        }
+
+        if (charInfo.Race == RaceT.Animal)
+        {
+            persona = PersonalityT.Loud;
+            humor += 1;
+        }
+        if (charInfo.Money == MoneyT.Medium || charInfo.Money == MoneyT.Rich)
+
         {
             if (money < MoneyT.Rich) money++;
-            charInfo.Money--;
+
         }
     }
 
