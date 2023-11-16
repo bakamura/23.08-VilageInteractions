@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static CharBase;
+using Random = UnityEngine.Random;
 
 [Serializable]
 public struct IdentityStats
@@ -56,12 +57,34 @@ public class CharMori : CharBase
     public IdentityStats shyKidStats;
     public IdentityStats crazyWomanStats;
     public IdentityStats angryOldManStats;
+    [HideInInspector]public IdentityStats fakeStats;
 
-    [Header("-----Fake Values-----"), Space]
-    public IdentityStats fakeStats;
+    private IdentityStats finalStats
+    {
+        get { return finalStats; }
+        set
+        {
+            humor = finalStats.realHumor;
+            age = finalStats.realAge;
+            race = finalStats.realRace;
+            persona = finalStats.realPersona;
+            money = finalStats.realMoney;
+            gender = finalStats.realGender;
+        }
+    }
 
-    [Header("-----Final Values-----"), Space]
-    IdentityStats finalStats;
+    public float identityDistortion
+    {
+        get { return identityDistortion; }
+        set
+        {
+            if (value > 1)
+            {
+                identityDistortion = 1;
+            }
+            else identityDistortion = value;
+        }
+    }
 
     [HideInInspector] public SpriteRenderer spriteRenderer;
     public void OnTriggerEnter2D(Collider2D collision)
@@ -82,21 +105,43 @@ public class CharMori : CharBase
 
     public ref IdentityStats GetCurrentIdentityStats()
     {
-        switch (currentIdentity)
+        if (Random.value < identityDistortion)
         {
-            case Identity.ShyKid:
-            default:
-                return ref shyKidStats;
-            case Identity.CrazyWoman:
-                return ref crazyWomanStats;
-            case Identity.AngryOldMan:
-                return ref angryOldManStats;
+            switch (currentIdentity)
+            {
+                case Identity.ShyKid:
+                default:
+                    return ref shyKidStats;
+
+                case Identity.CrazyWoman:
+                    return ref crazyWomanStats;
+
+                case Identity.AngryOldMan:
+                    return ref angryOldManStats;
+            }
+        }
+        else
+        {
+            switch (Random.Range(0, 3))
+            {
+                case 0:
+                default:
+                    return ref shyKidStats;
+
+                case 1:
+                    return ref crazyWomanStats;
+
+                case 2:
+                    return ref angryOldManStats;
+                case 3:
+                    return ref fakeStats;
+            }
         }
     }
 
     void Start()
     {
-        currentIdentity = (Identity)UnityEngine.Random.Range(0, 2);
+        currentIdentity = (Identity)Random.Range(0, 2);
         finalStats = GetCurrentIdentityStats();
         //Nao mexer na linha a baixo
         targetPosition = transform.position;
@@ -107,29 +152,71 @@ public class CharMori : CharBase
         if (socialMaskingEnergy > 0)
         {
             DefineCharValues(charInfo);
+            identityDistortion += 0.1f;
             socialMaskingEnergy--;
         }
         CheckIfAbilityIsLowCharge();
         ReactToOtherNpc(charInfo);
     }
-
     public void ReactToOtherNpc(CharBase charInfo)
     {
-        switch (currentIdentity)
+        if(identityDistortion<0.75f)
         {
-            case Identity.ShyKid:
-                switch (charInfo.Persona)
-                {
-                    case PersonalityT.Kind:
-                    case PersonalityT.Shy:
-                        realShyHumor += 1;
-                        break;
-                    default:
-                        realShyHumor -= 1;
-                        break;
-                }
-                //Continuar daqui
-                break;
+            switch (currentIdentity)
+            {
+                case Identity.ShyKid:
+                    switch (charInfo.Persona)
+                    {
+                        case PersonalityT.Kind:
+                        case PersonalityT.Shy:
+                            shyKidStats.realHumor += 1;
+                            break;
+                        default:
+                            shyKidStats.realHumor -= 1;
+                            break;
+                    }
+                    if(charInfo.Age < 15 || charInfo.Age > 25)
+                    {
+                        shyKidStats.realHumor += 1;
+                    }
+                    else
+                    {
+                        shyKidStats.realHumor -= 1;
+                    }
+                    break;
+                case Identity.CrazyWoman:
+                    switch(charInfo.Persona)
+                    {
+                        case PersonalityT.Loud:
+                        case PersonalityT.Sadistic:
+                        case PersonalityT.Shy:
+                            crazyWomanStats.realHumor -= 1;
+                            break;
+                    }
+                    switch(charInfo.Race)
+                    {
+                        case RaceT.Human:
+                            if(charInfo.Gender == GenderT.Male)
+                            {
+                                crazyWomanStats.realPersona = PersonalityT.Flirty;
+                                crazyWomanStats.realHumor += 1;
+                            }
+                            break;
+                    }
+                    break;
+                case Identity.AngryOldMan:
+                    if(charInfo.Age >= 65)
+                    {
+                        angryOldManStats.realHumor += 1;
+                    }    
+                    if(charInfo.Gender == GenderT.Other)
+                    {
+                        angryOldManStats.realPersona = PersonalityT.Grumpy;
+                        angryOldManStats.realHumor -= 1;
+                    }
+                    break;
+            }
+
         }
     }
 
@@ -137,12 +224,23 @@ public class CharMori : CharBase
     {
         return Random.value > socialMaskingEnergy / maxSocialMaskingEnergyCount;
     }
-    private float GetSuccessChance()
-    {
-        return socialMaskingEnergy / maxSocialMaskingEnergyCount;
-    }
     private void DefineCharValues(CharBase otherChar)
     {
+        if (RollForSuccessChance()) fakeStats.realHumor = otherChar.Humor;
+        else fakeStats.realHumor = humor;
+
+        if (RollForSuccessChance()) fakeStats.realGender = otherChar.Gender;
+        else fakeStats.realGender = gender;
+
+        if (RollForSuccessChance()) fakeStats.realPersona = otherChar.Persona;
+        else fakeStats.realPersona = persona;
+
+        if (RollForSuccessChance()) fakeStats.realAge = otherChar.Age;
+        else fakeStats.realAge = age;
+
+        if (RollForSuccessChance()) fakeStats.realMoney = otherChar.Money;
+        else fakeStats.realMoney = money;
+        //Try get other sprite 
         if (RollForSuccessChance())
         {
             spriteRenderer.sprite = otherChar.GetComponent<SpriteRenderer>().sprite;
@@ -153,30 +251,11 @@ public class CharMori : CharBase
             spriteRenderer.sprite = originalSprite;
             spriteRenderer.color = Color.white;
         }
-        GetRealCurrentIdentity(out GenderT realGender, out uint realAge, out RaceT realRace, out MoneyT realMoney, out float realHumor, out PersonalityT realPersona);
-        //Define gender
-        if (RollForSuccessChance()) gender = fakeGender;
-        else gender = realGender;
-
-        //Define age
-        if (RollForSuccessChance()) age = fakeAge;
-        else age = (uint)Mathf.RoundToInt(Mathf.Lerp(realAge, fakeAge, GetSuccessChance() * (Random.value * 0.75f)));
-
-        //Define race
-        if (RollForSuccessChance()) race = fakeRace;
-        else race = realRace;
-
-        //Define money
-        if (RollForSuccessChance()) money = fakeMoney;
-        else money = realMoney;
-
-        //Define humor
-        if (RollForSuccessChance()) humor = fakeHumor;
-        else humor = Mathf.Lerp(realHumor, fakeHumor, GetSuccessChance() * (Random.value * 0.75f));
-
-        //Define persona
-        if (RollForSuccessChance()) persona = fakePersona;
-        else persona = realPersona;
+        fakeStats.realHumor = GetCurrentIdentityStats().realHumor;
+        fakeStats.realGender = GetCurrentIdentityStats().realGender;
+        fakeStats.realPersona = GetCurrentIdentityStats().realPersona;
+        fakeStats.realAge = GetCurrentIdentityStats().realAge;
+        fakeStats.realMoney = GetCurrentIdentityStats().realMoney;
     }
     private void CheckIfAbilityIsLowCharge()
     {
@@ -193,6 +272,8 @@ public class CharMori : CharBase
     }
     public void OnChangePeriod(int periodo)
     {
+        currentIdentity = (Identity)Random.Range(0, 2);
+        identityDistortion += 0.1f;
         if (periodToLocation.ContainsKey(periodo))
         {
             Vector3 locationObject = GameManager._placePosition[periodToLocation[periodo]];

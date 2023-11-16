@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 43ad51e043491b94d8f6c62d55ac5ede, type: 3}
-  m_Color: {r: 0.47843137, g: 0, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -97,27 +97,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c93cbe0fa7efe5041a39697ffb80b328, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gender: 0
-  age: 0
-  race: 0
-  money: 0
-  humor: 0
-  persona: 0
-  moveSpeed: 1
-  originalSprite: {fileID: 0}
-  morphAbility: 10
-  realGender: 2
-  realAge: 425
-  realRace: 3
-  realMoney: 0
-  realHumor: 3
-  realPersona: 0
-  fakeGender: 0
-  fakeAge: 0
-  fakeRace: 0
-  fakeMoney: 0
-  fakeHumor: 0
-  fakePersona: 0
+  gender: 2
+  age: 65
+  race: 1
+  money: 1
+  humor: -2
+  persona: 1
+  moveSpeed: 5
+  originalSprite: {fileID: 21300000, guid: 43ad51e043491b94d8f6c62d55ac5ede, type: 3}
+  socialMaskingEnergy: 10
+  currentIdentity: 0
+  shyKidStats:
+    realGender: 0
+    realAge: 8
+    realRace: 0
+    realMoney: 0
+    realHumor: 2
+    realPersona: 2
+  crazyWomanStats:
+    realGender: 1
+    realAge: 25
+    realRace: 0
+    realMoney: 1
+    realHumor: -1
+    realPersona: 0
+  angryOldManStats:
+    realGender: 0
+    realAge: 75
+    realRace: 0
+    realMoney: 2
+    realHumor: 0
+    realPersona: 1
+  fakeStats:
+    realGender: 0
+    realAge: 0
+    realRace: 0
+    realMoney: 0
+    realHumor: 0
+    realPersona: 0
   spriteRenderer: {fileID: 0}
 --- !u!58 &8463146108604331159
 CircleCollider2D:
