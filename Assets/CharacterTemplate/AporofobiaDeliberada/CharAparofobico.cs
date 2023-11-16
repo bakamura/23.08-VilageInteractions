@@ -12,15 +12,7 @@ public class CharAparofobico : CharBase
         //Nao precisa mexer
         transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed / 10 * Time.deltaTime);
     }
-    private void AdicionarARotina(int periodoDoDia, string lugar)
-    {
-        periodToLocation.Add(1, "TownSquare");
-        periodToLocation.Add(2, "Bar");
-        periodToLocation.Add(3, "Bar");
-        periodToLocation.Add(4, "Bar");
-        periodToLocation.Add(5, "Bakery");
-        periodToLocation.Add(6, "Bakery");
-    }
+
 
     //Para implementacao simples mexer apenas a baixo
 
@@ -55,6 +47,12 @@ public class CharAparofobico : CharBase
         //Nao mexer na linha a baixo
         targetPosition = transform.position;
         GameManager.onChangePeriod.AddListener(OnChangePeriod);
+        periodToLocation.Add(1, "TownSquare");
+        periodToLocation.Add(2, "Bar");
+        periodToLocation.Add(3, "Bar");
+        periodToLocation.Add(4, "Bar");
+        periodToLocation.Add(5, "Bakery");
+        periodToLocation.Add(6, "Bakery");
     }
     public override void Interact(CharBase charInfo)
     {
