@@ -17,7 +17,6 @@ public struct IdentityStats
 }
 public class CharMori : CharBase
 {
-    private Dictionary<int, string> periodToLocation = new Dictionary<int, string>();
     private Vector3 targetPosition;
     [SerializeField] private float moveSpeed = 1f;
     private void Update()
@@ -25,13 +24,10 @@ public class CharMori : CharBase
         //Nao precisa mexer
         transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed / 10 * Time.deltaTime);
     }
-    private void AdicionarARotina(int periodoDoDia, string lugar)
-    {
-        periodToLocation.Add(periodoDoDia, lugar);
-    }
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+
     }
     /*
     Nome dos lugares no mapa:
@@ -57,7 +53,7 @@ public class CharMori : CharBase
     public IdentityStats shyKidStats;
     public IdentityStats crazyWomanStats;
     public IdentityStats angryOldManStats;
-    [HideInInspector]public IdentityStats fakeStats;
+    [HideInInspector] public IdentityStats fakeStats;
 
     private IdentityStats finalStats
     {
@@ -87,6 +83,63 @@ public class CharMori : CharBase
     }
 
     [HideInInspector] public SpriteRenderer spriteRenderer;
+
+    public string GetRoutinePosition(int period)
+    {
+        Identity identity = currentIdentity;
+        if (identityDistortion > 0.75) identity = (Identity)Random.Range(0, 2);
+        switch (identity)
+        {
+            case Identity.ShyKid:
+            default:
+                switch (period)
+                {
+                    case 0:
+                    case 1:
+                        return "TownSquare";
+                    case 2:
+                    case 3:
+                        return "Bakery";
+                    case 4:
+                    case 5:
+                    case 6:
+                    default:
+                        return "Library";
+                }
+            case Identity.CrazyWoman:
+                switch (period)
+                {
+                    case 0:
+                    case 1:
+                        return "Bakery";
+                    case 2:
+                    case 3:
+                        return "?";
+                    case 4:
+                    case 5:
+                    case 6:
+                    default:
+                        return "Bar";
+
+                }
+            case Identity.AngryOldMan:
+                switch (period)
+                {
+                    case 0:
+                    case 1:
+                        return "TownSquare";
+                    case 2:
+                    case 3:
+                        return "Library";
+                    case 4:
+                    case 5:
+                    case 6:
+                    default:
+                        return "Hospital";
+                }
+
+        }
+    }
     public void OnTriggerEnter2D(Collider2D collision)
     {
         //Nao mexer nessa funcao ate a implementacao de interacoes especificas com alguns personagens
@@ -160,7 +213,7 @@ public class CharMori : CharBase
     }
     public void ReactToOtherNpc(CharBase charInfo)
     {
-        if(identityDistortion<0.75f)
+        if (identityDistortion < 0.75f)
         {
             switch (currentIdentity)
             {
@@ -175,7 +228,7 @@ public class CharMori : CharBase
                             shyKidStats.realHumor -= 1;
                             break;
                     }
-                    if(charInfo.Age < 15 || charInfo.Age > 25)
+                    if (charInfo.Age < 15 || charInfo.Age > 25)
                     {
                         shyKidStats.realHumor += 1;
                     }
@@ -185,7 +238,7 @@ public class CharMori : CharBase
                     }
                     break;
                 case Identity.CrazyWoman:
-                    switch(charInfo.Persona)
+                    switch (charInfo.Persona)
                     {
                         case PersonalityT.Loud:
                         case PersonalityT.Sadistic:
@@ -193,10 +246,10 @@ public class CharMori : CharBase
                             crazyWomanStats.realHumor -= 1;
                             break;
                     }
-                    switch(charInfo.Race)
+                    switch (charInfo.Race)
                     {
                         case RaceT.Human:
-                            if(charInfo.Gender == GenderT.Male)
+                            if (charInfo.Gender == GenderT.Male)
                             {
                                 crazyWomanStats.realPersona = PersonalityT.Flirty;
                                 crazyWomanStats.realHumor += 1;
@@ -205,11 +258,11 @@ public class CharMori : CharBase
                     }
                     break;
                 case Identity.AngryOldMan:
-                    if(charInfo.Age >= 65)
+                    if (charInfo.Age >= 65)
                     {
                         angryOldManStats.realHumor += 1;
-                    }    
-                    if(charInfo.Gender == GenderT.Other)
+                    }
+                    if (charInfo.Gender == GenderT.Other)
                     {
                         angryOldManStats.realPersona = PersonalityT.Grumpy;
                         angryOldManStats.realHumor -= 1;
@@ -274,14 +327,13 @@ public class CharMori : CharBase
     {
         currentIdentity = (Identity)Random.Range(0, 2);
         identityDistortion += 0.1f;
-        if (periodToLocation.ContainsKey(periodo))
-        {
-            Vector3 locationObject = GameManager._placePosition[periodToLocation[periodo]];
 
-            if (locationObject != null)
-            {
-                targetPosition = locationObject;
-            }
+        Vector3 locationObject = GameManager._placePosition[GetRoutinePosition(periodo)];
+
+        if (locationObject != null)
+        {
+            targetPosition = locationObject;
         }
+
     }
 }
