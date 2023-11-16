@@ -45,29 +45,6 @@ public class CharPet : CharBase
 
         // Obtém a posição do collider do objeto
         Vector3 objectPosition = transform.position;
-
-        // Encontra todas as sprites na cena
-        SpriteRenderer[] allSprites = FindObjectsOfType<SpriteRenderer>();
-
-        // Itera sobre todas as sprites e as retorna para a cor padrão se estiverem fora do raio original e não forem a DragRenderer
-        foreach (SpriteRenderer spriteRenderer in allSprites)
-        {
-            if (spriteRenderer != null && spriteRenderer != DragRenderer)
-            {
-                float distance = Vector3.Distance(spriteRenderer.transform.position, objectPosition);
-
-                if (distance <= radius)
-                {
-                    spriteRenderer.color = GetRandomColorFromHumor(currentHumor); // Usa o valor de currentHumor para obter a cor
-                }
-                else
-                {
-                    spriteRenderer.color = defaultColor;
-                }
-            }
-        }
-
-
     }
 
     private Color GetRandomColorFromHumor(float humorValue)
@@ -111,21 +88,51 @@ public class CharPet : CharBase
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        
-
         //Nao mexer nessa funcao ate a implementacao de interacoes especificas com alguns personagens
         if (collision.gameObject.tag == "Char")
         {
             if (collision.TryGetComponent<CharBase>(out CharBase charBase))
             {
+                if (collision.TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
+                {
+                    currentHumor = charBase.Humor;
+                    spriteRenderer.color = GetRandomColorFromHumor(currentHumor);
+                    if (currentHumor <= 0)
+                    {
+                        spriteRenderer.transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
+                    }
+                }
+
                 charBase.Interact(this);
             }
             else
             {
+
                 Debug.Log("Erro em pegar informacoes de" + collision.gameObject.name);
             }
         }
     }
+
+    public void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent<CharBase>(out CharBase charBase))
+        {
+            if (collision.TryGetComponent<SpriteRenderer>(out SpriteRenderer spriteRenderer))
+            {
+                currentHumor = charBase.Humor;
+                spriteRenderer.color = defaultColor;
+
+                if (currentHumor <= 0)
+                {
+                    spriteRenderer.transform.localScale -= new Vector3(0.2f, 0.2f, 0.2f);
+                }
+            }
+
+            charBase.Interact(this);
+        }
+
+    }
+
     void Start()
     {
         AdicionarARotina(0, "TownSquare");
@@ -147,15 +154,10 @@ public class CharPet : CharBase
 
         if (charInfo.Gender == GenderT.Male)
         {
-            persona = PersonalityT.Flirty; 
-        }
-
-        else
-        {
-            persona = PersonalityT.Loud;
+            Persona = PersonalityT.Flirty; 
         }
         
-        switch (persona)
+        switch (Persona)
         {
             case PersonalityT.Loud:
 
@@ -168,7 +170,6 @@ public class CharPet : CharBase
 
             case PersonalityT.Flirty:
 
-                
                     //Anim.Play("Dominatrix");
                     DragRenderer.color = new Color(202, 207, 50, 255);
                 
@@ -180,14 +181,14 @@ public class CharPet : CharBase
             case -3:
                 if(humor >= -3 && humor <= 0)
                 {
-                    persona = PersonalityT.Flirty; 
+                    Persona = PersonalityT.Flirty; 
                 }
                 break;
 
             case 3:
                 if (humor >= 3 && humor <= 0)
                 {
-                    persona = PersonalityT.Loud;
+                    Persona = PersonalityT.Loud;
                 }
                 break;
         }
@@ -199,7 +200,7 @@ public class CharPet : CharBase
             case PersonalityT.Grumpy:
 
                 humor++;
-                transform.localScale += new Vector3 (1,1,1);
+                transform.localScale += new Vector3 (0.2f,0.2f,0.2f);
                 break;
 
 
@@ -213,7 +214,7 @@ public class CharPet : CharBase
             case PersonalityT.Flirty:
 
                 humor--;
-                transform.localScale -= new Vector3(1, 1, 1);
+                transform.localScale -= new Vector3(0.2f, 0.2f, 0.2f);
                 break;
         }
         

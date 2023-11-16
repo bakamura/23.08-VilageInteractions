@@ -165,5 +165,7 @@ MonoBehaviour:
   DragRenderer: {fileID: 6029933297135917816}
   anim: {fileID: 6029933297135917817}
   radius: 5
-  newColor: {r: 1, g: 0, b: 1, a: 1}
+  HotColor: {r: 0.9150943, g: 0.48776254, b: 0.9150943, a: 1}
+  ColdColor: {r: 0.34709862, g: 0.9811321, b: 0.9625088, a: 1}
   defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  currentHumor: 0
