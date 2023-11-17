@@ -8,6 +8,7 @@ public class Char_Yuri : CharBase
     private Dictionary<int, string> periodToLocation = new Dictionary<int, string>();
     private Vector3 targetPosition;
     [SerializeField] private float moveSpeed = 5f;
+    public int numero;
     private void Update()
     {
         //Nao precisa mexer
@@ -29,7 +30,8 @@ public class Char_Yuri : CharBase
     Hospital
     ?
     */
-    [Range(0, 1)] public int lobisomem;
+    
+    [Range(0, 100)] public int lobisomem;
     public void OnTriggerEnter2D(Collider2D collision)
     {
 
@@ -59,7 +61,7 @@ public class Char_Yuri : CharBase
             {
                 case "TownSquare":
 
-                    if (lobisomem > 0)
+                    if (lobisomem > 50)
                     {
                         persona = PersonalityT.Loud;
                         money--;
@@ -74,7 +76,7 @@ public class Char_Yuri : CharBase
                 case "Bakery":
 
                     money = MoneyT.Poor;
-                    if (lobisomem > 0)
+                    if (lobisomem > 50)
                     {
                         persona = PersonalityT.Loud;
                     }
@@ -87,7 +89,7 @@ public class Char_Yuri : CharBase
                 case "Bar":
 
                     money = MoneyT.Poor;
-                    if (lobisomem > 0)
+                    if (lobisomem > 50)
                     {
                         persona = PersonalityT.Grumpy;
                     }
@@ -99,7 +101,7 @@ public class Char_Yuri : CharBase
 
                 case "Library":
 
-                    if (lobisomem > 0)
+                    if (lobisomem > 50)
                     {
                         persona = PersonalityT.Sadistic;
                     }
@@ -111,7 +113,7 @@ public class Char_Yuri : CharBase
 
                 case "Hospital":
 
-                    if (lobisomem > 0)
+                    if (lobisomem > 50)
                     {
                         persona = PersonalityT.Grumpy;
                     }
@@ -147,7 +149,7 @@ public class Char_Yuri : CharBase
         {
             case PersonalityT.Loud:
 
-                if (lobisomem > 0)
+                if (lobisomem > 50)
                 {
                     persona = PersonalityT.Grumpy;
                 }
@@ -159,7 +161,7 @@ public class Char_Yuri : CharBase
 
             case PersonalityT.Shy:
 
-                if (lobisomem > 0)
+                if (lobisomem > 50)
                 {
                     persona = PersonalityT.Loud;
                 }
@@ -171,7 +173,7 @@ public class Char_Yuri : CharBase
 
             case PersonalityT.Sadistic:
 
-                if (lobisomem > 0)
+                if (lobisomem > 50)
                 {
                     persona = PersonalityT.Loud;
                 }
@@ -183,7 +185,7 @@ public class Char_Yuri : CharBase
 
             case PersonalityT.Grumpy:
 
-                if (lobisomem > 0)
+                if (lobisomem > 50)
                 {
                     persona = PersonalityT.Grumpy;
                 }
@@ -195,7 +197,7 @@ public class Char_Yuri : CharBase
 
             case PersonalityT.Kind:
 
-                if (lobisomem > 0)
+                if (lobisomem > 50)
                 {
                     persona = PersonalityT.Loud;
                 }
@@ -207,7 +209,7 @@ public class Char_Yuri : CharBase
 
             case PersonalityT.Flirty:
 
-                if (lobisomem > 0)
+                if (lobisomem > 50)
                 {
                     persona = PersonalityT.Grumpy;
                 }
@@ -221,7 +223,7 @@ public class Char_Yuri : CharBase
         {
             case RaceT.Animal:
 
-                if (lobisomem > 0)
+                if (lobisomem > 50)
                 {
                     persona = PersonalityT.Kind;
                     humor++;
@@ -235,7 +237,7 @@ public class Char_Yuri : CharBase
 
             case RaceT.Human:
 
-                if (lobisomem > 0)
+                if (lobisomem > 50)
                 {
                     persona = PersonalityT.Grumpy;
                     humor--;
@@ -249,7 +251,7 @@ public class Char_Yuri : CharBase
 
             case RaceT.Spirit:
 
-                if (lobisomem > 0)
+                if (lobisomem > 50)
                 {
                     persona = PersonalityT.Kind;
                     humor++;
@@ -263,7 +265,7 @@ public class Char_Yuri : CharBase
 
             case RaceT.NonHuman:
 
-                if (lobisomem > 0)
+                if (lobisomem > 50)
                 {
                     persona = PersonalityT.Kind;
                     humor++;
@@ -280,6 +282,7 @@ public class Char_Yuri : CharBase
 
     public void OnChangePeriod(int periodo)
     {
+        lobisomem = Random.Range(0, 100);
         if (periodToLocation.ContainsKey(periodo))
         {
             Vector3 locationObject = GameManager._placePosition[periodToLocation[periodo]];
