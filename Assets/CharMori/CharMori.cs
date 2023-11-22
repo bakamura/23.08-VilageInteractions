@@ -24,11 +24,6 @@ public class CharMori : CharBase
         //Nao precisa mexer
         transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed / 10 * Time.deltaTime);
     }
-    private void Awake()
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-
-    }
     /*
     Nome dos lugares no mapa:
     TownSquare
@@ -38,10 +33,6 @@ public class CharMori : CharBase
     Hospital
     ?
     */
-    public Sprite originalSprite;
-    [Range(0, 10)] public int socialMaskingEnergy = 10;
-    readonly private int maxSocialMaskingEnergyCount = 10;
-
     public enum Identity
     {
         ShyKid,
@@ -53,37 +44,156 @@ public class CharMori : CharBase
     public IdentityStats shyKidStats;
     public IdentityStats crazyWomanStats;
     public IdentityStats angryOldManStats;
-    [HideInInspector] public IdentityStats fakeStats;
 
-    private IdentityStats finalStats
-    {
-        get { return finalStats; }
-        set
-        {
-            humor = finalStats.realHumor;
-            age = finalStats.realAge;
-            race = finalStats.realRace;
-            persona = finalStats.realPersona;
-            money = finalStats.realMoney;
-            gender = finalStats.realGender;
-        }
-    }
-
+    private float IdentityDistortion;
     public float identityDistortion
     {
-        get { return identityDistortion; }
+        get { return IdentityDistortion; }
         set
         {
+            if (value > identityDistortion)
+            {
+                OnIdentityDistortionChange();
+            }
             if (value > 1)
             {
-                identityDistortion = 1;
+                IdentityDistortion = 1;
             }
-            else identityDistortion = value;
+            else IdentityDistortion = value;
+        }
+    }
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        //Nao mexer nessa funcao ate a implementacao de interacoes especificas com alguns personagens
+        if (collision.gameObject.tag == "Char")
+        {
+            if (collision.TryGetComponent<CharBase>(out CharBase charBase))
+            {
+                charBase.Interact(this);
+            }
+            else
+            {
+                Debug.Log("Erro em pegar informacoes de" + collision.gameObject.name);
+            }
         }
     }
 
-    [HideInInspector] public SpriteRenderer spriteRenderer;
+    public IdentityStats GetCurrentIdentityStats()
+    {
+        if (Random.value < identityDistortion)
+        {
+            switch (currentIdentity)
+            {
+                case Identity.ShyKid:
+                default:
+                    return shyKidStats;
 
+                case Identity.CrazyWoman:
+                    return crazyWomanStats;
+
+                case Identity.AngryOldMan:
+                    return angryOldManStats;
+            }
+        }
+        else
+        {
+            IdentityStats identityStats = new IdentityStats();
+            //Gender
+            switch (Random.Range(0, 2))
+            {
+                case 0:
+                    identityStats.realGender = shyKidStats.realGender;
+                    break;
+                case 1:
+                    identityStats.realGender = crazyWomanStats.realGender;
+                    break;
+                case 2:
+                    identityStats.realGender = angryOldManStats.realGender;
+                    break;
+            }
+            //Persona
+            switch (Random.Range(0, 2))
+            {
+                case 0:
+                    identityStats.realPersona = shyKidStats.realPersona;
+                    break;
+                case 1:
+                    identityStats.realPersona = crazyWomanStats.realPersona;
+                    break;
+                case 2:
+                    identityStats.realPersona = angryOldManStats.realPersona;
+                    break;
+            }
+            //Race
+            switch (Random.Range(0, 2))
+            {
+                case 0:
+                    identityStats.realRace = shyKidStats.realRace;
+                    break;
+                case 1:
+                    identityStats.realRace = crazyWomanStats.realRace;
+                    break;
+                case 2:
+                    identityStats.realRace = angryOldManStats.realRace;
+                    break;
+            }
+            //Age
+            switch (Random.Range(0, 2))
+            {
+                case 0:
+                    identityStats.realAge = shyKidStats.realAge;
+                    break;
+                case 1:
+                    identityStats.realAge = crazyWomanStats.realAge;
+                    break;
+                case 2:
+                    identityStats.realAge = angryOldManStats.realAge;
+                    break;
+            }
+            //Money
+            switch (Random.Range(0, 2))
+            {
+                case 0:
+                    identityStats.realMoney = shyKidStats.realMoney;
+                    break;
+                case 1:
+                    identityStats.realMoney = crazyWomanStats.realMoney;
+                    break;
+                case 2:
+                    identityStats.realMoney = angryOldManStats.realMoney;
+                    break;
+            }
+            //Humor
+            switch (Random.Range(0, 2))
+            {
+                case 0:
+                    identityStats.realHumor = shyKidStats.realHumor;
+                    break;
+                case 1:
+                    identityStats.realHumor = crazyWomanStats.realHumor;
+                    break;
+                case 2:
+                    identityStats.realHumor = angryOldManStats.realHumor;
+                    break;
+            }
+            return identityStats;
+        }
+    }
+    public ref IdentityStats GetCurrentIdentityStatsRef()
+    {
+        switch (currentIdentity)
+        {
+            case Identity.ShyKid:
+            default:
+                return ref shyKidStats;
+
+            case Identity.CrazyWoman:
+                return ref crazyWomanStats;
+
+            case Identity.AngryOldMan:
+                return ref angryOldManStats;
+        }
+    }
     public string GetRoutinePosition(int period)
     {
         Identity identity = currentIdentity;
@@ -95,12 +205,14 @@ public class CharMori : CharBase
                 switch (period)
                 {
                     case 0:
+                        return "Bakery";
                     case 1:
                         return "TownSquare";
                     case 2:
                     case 3:
-                        return "Bakery";
+                        return "Library";
                     case 4:
+                        return "TownSquare";
                     case 5:
                     case 6:
                     default:
@@ -110,13 +222,16 @@ public class CharMori : CharBase
                 switch (period)
                 {
                     case 0:
+                        return "TownSquare";
                     case 1:
                         return "Bakery";
                     case 2:
                     case 3:
                         return "?";
                     case 4:
+                        return "Library";
                     case 5:
+                        return "Hospital";
                     case 6:
                     default:
                         return "Bar";
@@ -140,84 +255,39 @@ public class CharMori : CharBase
 
         }
     }
-    public void OnTriggerEnter2D(Collider2D collision)
+
+    public void OnIdentityDistortionChange()
     {
-        //Nao mexer nessa funcao ate a implementacao de interacoes especificas com alguns personagens
-        if (collision.gameObject.tag == "Char")
-        {
-            if (collision.TryGetComponent<CharBase>(out CharBase charBase))
-            {
-                charBase.Interact(this);
-            }
-            else
-            {
-                Debug.Log("Erro em pegar informacoes de" + collision.gameObject.name);
-            }
-        }
+        currentIdentity = (Identity)Random.Range(0, 2);
+        IdentityStats identityStats = GetCurrentIdentityStats();
+        humor = identityStats.realHumor;
+        age = identityStats.realAge;
+        money = identityStats.realMoney;
+        race = identityStats.realRace;
+        gender = identityStats.realGender;
+        persona = identityStats.realPersona;
     }
-
-    public ref IdentityStats GetCurrentIdentityStats()
-    {
-        if (Random.value < identityDistortion)
-        {
-            switch (currentIdentity)
-            {
-                case Identity.ShyKid:
-                default:
-                    return ref shyKidStats;
-
-                case Identity.CrazyWoman:
-                    return ref crazyWomanStats;
-
-                case Identity.AngryOldMan:
-                    return ref angryOldManStats;
-            }
-        }
-        else
-        {
-            switch (Random.Range(0, 3))
-            {
-                case 0:
-                default:
-                    return ref shyKidStats;
-
-                case 1:
-                    return ref crazyWomanStats;
-
-                case 2:
-                    return ref angryOldManStats;
-                case 3:
-                    return ref fakeStats;
-            }
-        }
-    }
-
     void Start()
     {
         currentIdentity = (Identity)Random.Range(0, 2);
-        finalStats = GetCurrentIdentityStats();
         //Nao mexer na linha a baixo
         targetPosition = transform.position;
         GameManager.onChangePeriod.AddListener(OnChangePeriod);
     }
     public override void Interact(CharBase charInfo)
     {
-        if (socialMaskingEnergy > 0)
-        {
-            DefineCharValues(charInfo);
-            identityDistortion += 0.1f;
-            socialMaskingEnergy--;
-        }
-        CheckIfAbilityIsLowCharge();
+        identityDistortion += 0.05f;
         ReactToOtherNpc(charInfo);
     }
     public void ReactToOtherNpc(CharBase charInfo)
     {
+        
         if (identityDistortion < 0.75f)
         {
             switch (currentIdentity)
             {
                 case Identity.ShyKid:
+                    //Persona
                     switch (charInfo.Persona)
                     {
                         case PersonalityT.Kind:
@@ -228,6 +298,7 @@ public class CharMori : CharBase
                             shyKidStats.realHumor -= 1;
                             break;
                     }
+                    //Age
                     if (charInfo.Age < 15 || charInfo.Age > 25)
                     {
                         shyKidStats.realHumor += 1;
@@ -236,8 +307,49 @@ public class CharMori : CharBase
                     {
                         shyKidStats.realHumor -= 1;
                     }
+                    //Money dont change
+                    //Race
+                    switch(charInfo.Race)
+                    {
+                        case RaceT.Animal:
+                            shyKidStats.realHumor += 1;
+                            break;
+                        case RaceT.Spirit:
+                        case RaceT.NonHuman:
+                            shyKidStats.realPersona = PersonalityT.Loud;
+                            shyKidStats.realHumor -= 1;
+                            break;
+                    }
+                    //Gender
+                    if(shyKidStats.realGender != charInfo.Gender)
+                    {
+                        if(charInfo.Humor>=2)
+                        {
+                            shyKidStats.realPersona = PersonalityT.Kind;
+                        }
+                        else shyKidStats.realPersona = PersonalityT.Shy;
+                    }
+                    //Humor
+                    if(charInfo.Humor<-1)
+                    {
+                        identityDistortion += 0.1f;
+                        shyKidStats.realPersona = PersonalityT.Loud;
+                        shyKidStats.realHumor -= 1;
+                    }
+                    else if(charInfo.Humor<2)
+                    {
+                        shyKidStats.realPersona = PersonalityT.Shy;
+                        shyKidStats.realHumor += 1;
+                    }
+                    else
+                    {
+                        shyKidStats.realPersona = PersonalityT.Kind;
+                        shyKidStats.realHumor += 2;
+                        identityDistortion -= 0.1f;
+                    }
                     break;
                 case Identity.CrazyWoman:
+                    //Persona
                     switch (charInfo.Persona)
                     {
                         case PersonalityT.Loud:
@@ -246,6 +358,7 @@ public class CharMori : CharBase
                             crazyWomanStats.realHumor -= 1;
                             break;
                     }
+                    //Race
                     switch (charInfo.Race)
                     {
                         case RaceT.Human:
@@ -256,77 +369,83 @@ public class CharMori : CharBase
                             }
                             break;
                     }
+                    //Humor
+                    if(crazyWomanStats.realHumor<-2 || crazyWomanStats.realHumor >2)
+                    {
+                        crazyWomanStats.realHumor += 1;
+                        crazyWomanStats.realPersona = PersonalityT.Loud;
+                    }
+                    else
+                    {
+                        crazyWomanStats.realPersona = PersonalityT.Grumpy;
+                    }
+                    //Gender dont change
+                    //Age
+                    if(charInfo.Age - crazyWomanStats.realAge <10 && charInfo.Age>18)
+                    {
+                        crazyWomanStats.realPersona = PersonalityT.Flirty;
+                        if(charInfo.Humor>2)
+                        {
+                            crazyWomanStats.realHumor += 1;
+                        }
+                    }
+                    //Money dont change
                     break;
                 case Identity.AngryOldMan:
+                    //Age
                     if (charInfo.Age >= 65)
                     {
                         angryOldManStats.realHumor += 1;
                     }
+                    //Gender
                     if (charInfo.Gender == GenderT.Other)
                     {
                         angryOldManStats.realPersona = PersonalityT.Grumpy;
                         angryOldManStats.realHumor -= 1;
                     }
+                    //Persona
+                    switch(charInfo.Persona)
+                    {
+                        case PersonalityT.Flirty:
+                        case PersonalityT.Loud:
+                        case PersonalityT.Shy:
+                            angryOldManStats.realHumor -= 1;
+                            break;
+                        case PersonalityT.Grumpy:
+                        case PersonalityT.Sadistic:
+                            angryOldManStats.realPersona = PersonalityT.Grumpy;
+                            break;
+                        case PersonalityT.Kind:
+                            angryOldManStats.realHumor += 1;
+                            break;
+                    }
+                    //Humor dont change
+                    //Money dont change
+                    //Race
+                    switch (charInfo.Race)
+                    {
+                        case RaceT.Animal:
+                        case RaceT.Human:
+                            angryOldManStats.realHumor += 1;
+                            break;
+                        case RaceT.Spirit:
+                            angryOldManStats.realPersona = PersonalityT.Loud;
+                            angryOldManStats.realHumor -= 2;
+                            break;
+                        case RaceT.NonHuman:
+                            angryOldManStats.realPersona = PersonalityT.Grumpy;
+                            angryOldManStats.realHumor -= 1;
+                            break;
+                    }
                     break;
             }
-
         }
     }
 
-    private bool RollForSuccessChance()
-    {
-        return Random.value > socialMaskingEnergy / maxSocialMaskingEnergyCount;
-    }
-    private void DefineCharValues(CharBase otherChar)
-    {
-        if (RollForSuccessChance()) fakeStats.realHumor = otherChar.Humor;
-        else fakeStats.realHumor = humor;
-
-        if (RollForSuccessChance()) fakeStats.realGender = otherChar.Gender;
-        else fakeStats.realGender = gender;
-
-        if (RollForSuccessChance()) fakeStats.realPersona = otherChar.Persona;
-        else fakeStats.realPersona = persona;
-
-        if (RollForSuccessChance()) fakeStats.realAge = otherChar.Age;
-        else fakeStats.realAge = age;
-
-        if (RollForSuccessChance()) fakeStats.realMoney = otherChar.Money;
-        else fakeStats.realMoney = money;
-        //Try get other sprite 
-        if (RollForSuccessChance())
-        {
-            spriteRenderer.sprite = otherChar.GetComponent<SpriteRenderer>().sprite;
-            spriteRenderer.color = new Color(0.5f, 0, 1);
-        }
-        else
-        {
-            spriteRenderer.sprite = originalSprite;
-            spriteRenderer.color = Color.white;
-        }
-        fakeStats.realHumor = GetCurrentIdentityStats().realHumor;
-        fakeStats.realGender = GetCurrentIdentityStats().realGender;
-        fakeStats.realPersona = GetCurrentIdentityStats().realPersona;
-        fakeStats.realAge = GetCurrentIdentityStats().realAge;
-        fakeStats.realMoney = GetCurrentIdentityStats().realMoney;
-    }
-    private void CheckIfAbilityIsLowCharge()
-    {
-        if (socialMaskingEnergy <= 0)
-        {
-            if (RestoreAbilityCoroutine == null) RestoreAbilityCoroutine = StartCoroutine(RestoreAbility());
-        }
-    }
-    Coroutine RestoreAbilityCoroutine;
-    private IEnumerator RestoreAbility()
-    {
-        yield return new WaitForSeconds(10f);
-        socialMaskingEnergy = maxSocialMaskingEnergyCount;
-    }
     public void OnChangePeriod(int periodo)
     {
         currentIdentity = (Identity)Random.Range(0, 2);
-        identityDistortion += 0.1f;
+        identityDistortion += 0.25f;
 
         Vector3 locationObject = GameManager._placePosition[GetRoutinePosition(periodo)];
 
