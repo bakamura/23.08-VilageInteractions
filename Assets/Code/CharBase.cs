@@ -31,12 +31,12 @@ public abstract class CharBase : MonoBehaviour
         Flirty
     }
 
-    [SerializeField] protected GenderT gender;
-    [SerializeField,] protected uint age;
-    [SerializeField] protected RaceT race;
-    [SerializeField] protected MoneyT money;
-    [SerializeField, Range(-3, 3)] protected float humor;
-    [SerializeField] protected PersonalityT persona;
+    [SerializeField]  public GenderT gender;
+    [SerializeField] public uint age;
+    [SerializeField] public RaceT race;
+    [SerializeField] public MoneyT money;
+    [SerializeField, Range(-3, 3)] public float humor;
+    [SerializeField] public PersonalityT persona;
 
     public GenderT Gender { get { return gender; } set { gender = value; } }
     public uint Age { get { return age; } set { age = value; } }

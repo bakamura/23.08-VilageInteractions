@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour {
 
     [Header("Timer")]
 
-    private int _periodCurrent = -1;
+    public int _periodCurrent = -1;
     [SerializeField] private int _periodTotal;
     [SerializeField] private float _periodDuration = 5.0f;
     private float _periodCurrentInterval;
@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour {
             _periodCurrent ++;
             onChangePeriod.Invoke(_periodCurrent);
             _periodDisplay.text = $"{_periodCurrent}:00";
+
         }
     }
 
