@@ -281,171 +281,169 @@ public class CharMori : CharBase
     }
     public void ReactToOtherNpc(CharBase charInfo)
     {
-        
-        if (identityDistortion < 0.75f)
+
+        switch (currentIdentity)
         {
-            switch (currentIdentity)
-            {
-                case Identity.ShyKid:
-                    //Persona
-                    switch (charInfo.Persona)
-                    {
-                        case PersonalityT.Kind:
-                        case PersonalityT.Shy:
-                            shyKidStats.realHumor += 1;
-                            break;
-                        default:
-                            shyKidStats.realHumor -= 1;
-                            break;
-                    }
-                    //Age
-                    if (charInfo.Age < 15 || charInfo.Age > 25)
-                    {
+            case Identity.ShyKid:
+                //Persona
+                switch (charInfo.Persona)
+                {
+                    case PersonalityT.Kind:
+                    case PersonalityT.Shy:
                         shyKidStats.realHumor += 1;
-                    }
-                    else
-                    {
+                        break;
+                    default:
                         shyKidStats.realHumor -= 1;
-                    }
-                    //Money dont change
-                    //Race
-                    switch(charInfo.Race)
-                    {
-                        case RaceT.Animal:
-                            shyKidStats.realHumor += 1;
-                            break;
-                        case RaceT.Spirit:
-                        case RaceT.NonHuman:
-                            shyKidStats.realPersona = PersonalityT.Loud;
-                            shyKidStats.realHumor -= 1;
-                            break;
-                    }
-                    //Gender
-                    if(shyKidStats.realGender != charInfo.Gender)
-                    {
-                        if(charInfo.Humor>=2)
-                        {
-                            shyKidStats.realPersona = PersonalityT.Kind;
-                        }
-                        else shyKidStats.realPersona = PersonalityT.Shy;
-                    }
-                    //Humor
-                    if(charInfo.Humor<-1)
-                    {
-                        identityDistortion += 0.1f;
+                        break;
+                }
+                //Age
+                if (charInfo.Age < 15 || charInfo.Age > 25)
+                {
+                    shyKidStats.realHumor += 1;
+                }
+                else
+                {
+                    shyKidStats.realHumor -= 1;
+                }
+                //Money dont change
+                //Race
+                switch (charInfo.Race)
+                {
+                    case RaceT.Animal:
+                        shyKidStats.realHumor += 1;
+                        break;
+                    case RaceT.Spirit:
+                    case RaceT.NonHuman:
                         shyKidStats.realPersona = PersonalityT.Loud;
                         shyKidStats.realHumor -= 1;
-                    }
-                    else if(charInfo.Humor<2)
-                    {
-                        shyKidStats.realPersona = PersonalityT.Shy;
-                        shyKidStats.realHumor += 1;
-                    }
-                    else
+                        break;
+                }
+                //Gender
+                if (shyKidStats.realGender != charInfo.Gender)
+                {
+                    if (charInfo.Humor >= 2)
                     {
                         shyKidStats.realPersona = PersonalityT.Kind;
-                        shyKidStats.realHumor += 2;
-                        identityDistortion -= 0.1f;
                     }
-                    break;
-                case Identity.CrazyWoman:
-                    //Persona
-                    switch (charInfo.Persona)
-                    {
-                        case PersonalityT.Loud:
-                        case PersonalityT.Sadistic:
-                        case PersonalityT.Shy:
-                            crazyWomanStats.realHumor -= 1;
-                            break;
-                    }
-                    //Race
-                    switch (charInfo.Race)
-                    {
-                        case RaceT.Human:
-                            if (charInfo.Gender == GenderT.Male)
-                            {
-                                crazyWomanStats.realPersona = PersonalityT.Flirty;
-                                crazyWomanStats.realHumor += 1;
-                            }
-                            break;
-                    }
-                    //Humor
-                    if(crazyWomanStats.realHumor<-2 || crazyWomanStats.realHumor >2)
-                    {
-                        crazyWomanStats.realHumor += 1;
-                        crazyWomanStats.realPersona = PersonalityT.Loud;
-                    }
-                    else
-                    {
-                        crazyWomanStats.realPersona = PersonalityT.Grumpy;
-                    }
-                    //Gender dont change
-                    //Age
-                    if(charInfo.Age - crazyWomanStats.realAge <10 && charInfo.Age>18)
-                    {
-                        crazyWomanStats.realPersona = PersonalityT.Flirty;
-                        if(charInfo.Humor>2)
+                    else shyKidStats.realPersona = PersonalityT.Shy;
+                }
+                //Humor
+                if (charInfo.Humor < -1)
+                {
+                    identityDistortion += 0.1f;
+                    shyKidStats.realPersona = PersonalityT.Loud;
+                    shyKidStats.realHumor -= 1;
+                }
+                else if (charInfo.Humor < 2)
+                {
+                    shyKidStats.realPersona = PersonalityT.Shy;
+                    shyKidStats.realHumor += 1;
+                }
+                else
+                {
+                    shyKidStats.realPersona = PersonalityT.Kind;
+                    shyKidStats.realHumor += 2;
+                    identityDistortion -= 0.1f;
+                }
+                break;
+            case Identity.CrazyWoman:
+                //Persona
+                switch (charInfo.Persona)
+                {
+                    case PersonalityT.Loud:
+                    case PersonalityT.Sadistic:
+                    case PersonalityT.Shy:
+                        crazyWomanStats.realHumor -= 1;
+                        break;
+                }
+                //Race
+                switch (charInfo.Race)
+                {
+                    case RaceT.Human:
+                        if (charInfo.Gender == GenderT.Male)
                         {
+                            crazyWomanStats.realPersona = PersonalityT.Flirty;
                             crazyWomanStats.realHumor += 1;
                         }
-                    }
-                    //Money dont change
-                    break;
-                case Identity.AngryOldMan:
-                    //Age
-                    if (charInfo.Age >= 65)
+                        break;
+                }
+                //Humor
+                if (crazyWomanStats.realHumor < -2 || crazyWomanStats.realHumor > 2)
+                {
+                    crazyWomanStats.realHumor += 1;
+                    crazyWomanStats.realPersona = PersonalityT.Loud;
+                }
+                else
+                {
+                    crazyWomanStats.realPersona = PersonalityT.Grumpy;
+                }
+                //Gender dont change
+                //Age
+                if (charInfo.Age - crazyWomanStats.realAge < 10 && charInfo.Age > 18)
+                {
+                    crazyWomanStats.realPersona = PersonalityT.Flirty;
+                    if (charInfo.Humor > 2)
                     {
+                        crazyWomanStats.realHumor += 1;
+                    }
+                }
+                //Money dont change
+                break;
+            case Identity.AngryOldMan:
+                //Age
+                if (charInfo.Age >= 65)
+                {
+                    angryOldManStats.realHumor += 1;
+                }
+                //Gender
+                if (charInfo.Gender == GenderT.Other)
+                {
+                    angryOldManStats.realPersona = PersonalityT.Grumpy;
+                    angryOldManStats.realHumor -= 1;
+                }
+                //Persona
+                switch (charInfo.Persona)
+                {
+                    case PersonalityT.Flirty:
+                    case PersonalityT.Loud:
+                    case PersonalityT.Shy:
+                        angryOldManStats.realHumor -= 1;
+                        break;
+                    case PersonalityT.Grumpy:
+                    case PersonalityT.Sadistic:
+                        angryOldManStats.realPersona = PersonalityT.Grumpy;
+                        break;
+                    case PersonalityT.Kind:
                         angryOldManStats.realHumor += 1;
-                    }
-                    //Gender
-                    if (charInfo.Gender == GenderT.Other)
-                    {
+                        break;
+                }
+                //Humor dont change
+                //Money dont change
+                //Race
+                switch (charInfo.Race)
+                {
+                    case RaceT.Animal:
+                    case RaceT.Human:
+                        angryOldManStats.realHumor += 1;
+                        break;
+                    case RaceT.Spirit:
+                        angryOldManStats.realPersona = PersonalityT.Loud;
+                        angryOldManStats.realHumor -= 2;
+                        break;
+                    case RaceT.NonHuman:
                         angryOldManStats.realPersona = PersonalityT.Grumpy;
                         angryOldManStats.realHumor -= 1;
-                    }
-                    //Persona
-                    switch(charInfo.Persona)
-                    {
-                        case PersonalityT.Flirty:
-                        case PersonalityT.Loud:
-                        case PersonalityT.Shy:
-                            angryOldManStats.realHumor -= 1;
-                            break;
-                        case PersonalityT.Grumpy:
-                        case PersonalityT.Sadistic:
-                            angryOldManStats.realPersona = PersonalityT.Grumpy;
-                            break;
-                        case PersonalityT.Kind:
-                            angryOldManStats.realHumor += 1;
-                            break;
-                    }
-                    //Humor dont change
-                    //Money dont change
-                    //Race
-                    switch (charInfo.Race)
-                    {
-                        case RaceT.Animal:
-                        case RaceT.Human:
-                            angryOldManStats.realHumor += 1;
-                            break;
-                        case RaceT.Spirit:
-                            angryOldManStats.realPersona = PersonalityT.Loud;
-                            angryOldManStats.realHumor -= 2;
-                            break;
-                        case RaceT.NonHuman:
-                            angryOldManStats.realPersona = PersonalityT.Grumpy;
-                            angryOldManStats.realHumor -= 1;
-                            break;
-                    }
-                    break;
-            }
+                        break;
+                }
+                break;
         }
+
     }
 
     public void OnChangePeriod(int periodo)
     {
         currentIdentity = (Identity)Random.Range(0, 2);
-        identityDistortion += 0.25f;
+        identityDistortion += 0.1f;
 
         Vector3 locationObject = GameManager._placePosition[GetRoutinePosition(periodo)];
 
