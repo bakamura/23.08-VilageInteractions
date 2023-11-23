@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 5994282615341811745}
   - component: {fileID: 5994282615341811744}
   - component: {fileID: 5994282615341811807}
-  - component: {fileID: 5994282615341811806}
   - component: {fileID: 5994282615341811805}
+  - component: {fileID: 522723059153658351}
   m_Layer: 0
   m_Name: 'Fuksho '
   m_TagString: Untagged
@@ -111,25 +111,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.02, y: 1.92}
   m_EdgeRadius: 0
---- !u!114 &5994282615341811806
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5994282615341811804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea8d19afefddedf45b0ac962ef31bb28, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gender: 0
-  age: 75
-  race: 0
-  money: 1
-  humor: 0.65
-  persona: 2
-  moveSpeed: 5
 --- !u!61 &5994282615341811805
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -156,3 +137,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.51, y: 2.21}
   m_EdgeRadius: 0
+--- !u!114 &522723059153658351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5994282615341811804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebff9494a1fcc5a43b24a6936c7005cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gender: 0
+  age: 75
+  race: 0
+  money: 1
+  humor: 0
+  persona: 2
+  moveSpeed: 5

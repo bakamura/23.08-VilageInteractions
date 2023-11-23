@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Char_Fuksho : CharBase
+public class Char_Fuksho_O : CharBase
 {
     private Dictionary<int, string> periodToLocation = new Dictionary<int, string>();
     private Vector3 targetPosition;
@@ -47,11 +47,11 @@ public class Char_Fuksho : CharBase
             //    humor+=1;
             //    persona=PersonalityT.Loud;  
             //}
-            //if (collision.TryGetComponent<Char_Icognito>(out Char_Icognito Naka))
-            //{
-            //    humor-=2;
-            //    persona=PersonalityT.Loud;  
-            //}
+            if (collision.TryGetComponent<Char_Icognito>(out Char_Icognito Naka))
+            {
+                humor-=2;
+                persona=PersonalityT.Loud;  
+            }
             //if (collision.TryGetComponent<player>(out Player player))
             //{
             //    humor+=1;

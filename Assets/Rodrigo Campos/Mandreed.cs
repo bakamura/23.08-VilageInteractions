@@ -2,15 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Char_Fuksho : CharBase
+public class Mandreed : CharBase
 {
     private Dictionary<int, string> periodToLocation = new Dictionary<int, string>();
     private Vector3 targetPosition;
     [SerializeField] private float moveSpeed = 5f;
+    [SerializeField] private float rotationDegree;
+    [SerializeField] private float rotationSpeed;
+
     private void Update()
     {
         //Nao precisa mexer
         transform.position = Vector3.Lerp(transform.position, targetPosition, moveSpeed / 10 * Time.deltaTime);
+        transform.eulerAngles = Vector3.forward * Mathf.Sin(Time.realtimeSinceStartup * rotationSpeed) * rotationDegree;
     }
     private void AdicionarARotina(int periodoDoDia, string lugar)
     {
@@ -34,7 +38,6 @@ public class Char_Fuksho : CharBase
 
         if (collision.gameObject.tag == "Char")
         {
-            
             //Para colocar uma interacao especifica entre alguns personagens
             //Use o modelo a baixo
             // if (collision.TryGetComponent<"Nome da classe do outro npc especifico">(out "Nome da classe do outro npc especifico" "Como vc pretende chamar a classe desse npc"))
@@ -42,31 +45,15 @@ public class Char_Fuksho : CharBase
             {
                 //Aqui pode acessar as variaveis unicas daquele npc
             }
-            if (collision.TryGetComponent<Mandreed>(out Mandreed planta))
-            {
-                humor+=1;
-                persona=PersonalityT.Loud;  
-            }
-            if (collision.TryGetComponent<Char_Icognito>(out Char_Icognito Naka))
-            {
-                humor-=2;
-                persona=PersonalityT.Grumpy;  
-            }
-            if (collision.TryGetComponent<Char_Christian>(out Char_Christian chris))
-            {
-                humor-=2;
-                persona=PersonalityT.Grumpy;  
-            }
-            if (collision.TryGetComponent<Bily>(out Bily pesca))
-            {
-                humor+=2;
-                persona=PersonalityT.Kind;  
-                money=MoneyT.Poor;
-            }
-            //if (collision.TryGetComponent<player>(out Player player))
+            //if (collision.TryGetComponent<Char_Fuksho>(out Char_Fuksho benj))
             //{
-            //    humor+=1;
-            //    persona=PersonalityT.Loud;  
+            //    humor += 1;
+            //    persona = PersonalityT.Kind;
+            //}
+            //if (collision.TryGetComponent<Char_Icognito>(out Char_Icognito naka))
+            //{
+            //    humor -= 3;
+            //    persona = PersonalityT.Grumpy;
             //}
             // Colocar apos o {} "else"
             else if (collision.TryGetComponent<CharBase>(out CharBase charBase))
@@ -84,29 +71,21 @@ public class Char_Fuksho : CharBase
             switch (collision.gameObject.name)
             {
                 case "TownSquare":
-                    persona = PersonalityT.Loud;
-                    money = MoneyT.Rich;
-                    humor+=2;
+
                     break;
                 case "Bakery":
-                    persona=PersonalityT.Kind;
-                    money=MoneyT.Medium;
-                    humor+=.5f;
+
                     break;
                 case "Bar":
-                    //Caso o npc estiver no bar, ele ficara pobre e tera seu humor restaurado ao valor maximo 
-                    persona = PersonalityT.Loud;   
+                    //Caso o npc estiver no bar, ele ficara pobre e tera seu humor restaurado ao valor maximo
                     money = MoneyT.Poor;
-                    humor += 3;
+                    humor = 3;
                     break;
                 case "Library":
                     //Caso o npc estiver na biblioteca o npc ficara timido
                     persona = PersonalityT.Shy;
-                    humor+=.5f;
                     break;
                 case "Hospital":
-                    persona=PersonalityT.Kind;
-                    money=MoneyT.Medium;
                     break;
                 case "?":
 
@@ -124,15 +103,14 @@ public class Char_Fuksho : CharBase
         //Exemplo de adicionar um local a sua rotina
 
         //Voce devera usar a funcao AdicionarARotina, nela dentro dos () primeiro colocaremos o horario e apos a virgula o local que vamos ir entre ""
+
         AdicionarARotina(0, "TownSquare");
-        //Nesse caso o jogador esta indo a TownSquare no momento 0
-        //AdicionarARotina(1, "Hospital");
-        //E indo ao hospital no momento 1
-        AdicionarARotina(2, "Bar");
-        AdicionarARotina(3, "TownSquare");
-        AdicionarARotina(5, "Library");
+
+        AdicionarARotina(2, "Library");
+
+        AdicionarARotina(4, "Bar");
+
         AdicionarARotina(6, "TownSquare");
-        //PS: Um pouco acima tem uma lista de todas localizacoes presentes no mapa
 
         //Nao mexer na linha a baixo 
         targetPosition = transform.position;
@@ -151,57 +129,41 @@ public class Char_Fuksho : CharBase
         //charInfo.Humor;
 
         //Vamos fazer um exemplo que o nosso personagem se o outro for da personalidade "Loud" ele ira perder humor
-        switch(charInfo.Persona)
+        if (charInfo.Persona == PersonalityT.Loud)
         {
-            case PersonalityT.Loud:
-            humor+=1;
-            break;
-            case PersonalityT.Flirty:
-            humor+=1;
-            break;
-            case PersonalityT.Kind:
-            humor+=1;
-            break;
-            case PersonalityT.Grumpy:
-            humor-=1;
-            break;
-            case PersonalityT.Sadistic:
-            humor-=2;
-            break;
-            case PersonalityT.Shy:
-            humor=+1;
-            break;
+            humor -= 2;
         }
 
-        switch(charInfo.Gender)
+        if (charInfo.Persona == PersonalityT.Grumpy)
         {
-            case GenderT.Female:
-            persona=PersonalityT.Flirty;
-            humor+=1;
-            break;
-            case GenderT.Male:
-            persona=PersonalityT.Loud;
-            break;
-            case GenderT.Other:
-            persona=PersonalityT.Loud;
-            break;
-        }
-        switch(charInfo.Money)
-        {
-            case MoneyT.Rich:
-            humor+=2;
-            persona=PersonalityT.Kind;
-            break;
-            case MoneyT.Medium:
-            humor+=1;
-            persona=PersonalityT.Loud;
-            break;
-            case MoneyT.Poor:
-            persona=PersonalityT.Loud;
-            break;
+            humor -= 1.5f;
         }
 
-        
+        if (charInfo.Persona == PersonalityT.Sadistic)
+        {
+            humor -= 3;
+        }
+
+        if (charInfo.Persona == PersonalityT.Shy)
+        {
+            humor += 1.5f;
+        }
+
+        if (charInfo.Persona == PersonalityT.Kind)
+        {
+            humor += 3;
+        }
+
+        if (charInfo.Race == RaceT.Animal)
+        {
+            humor += 1.5f;
+        }
+
+        if (charInfo.Race == RaceT.Spirit)
+        {
+            humor += 1.5f;
+        }
+
     }
 
     public void OnChangePeriod(int periodo)
