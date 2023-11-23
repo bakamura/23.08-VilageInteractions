@@ -91,9 +91,12 @@ public class CodeFilo : CharBase
     {
         //Rota e Rotina do meu personagem.
         AdicionarARotina(0, "Bakery");
-        AdicionarARotina(2, "TownSquare");
+        AdicionarARotina(1, "TownSquare");
+        AdicionarARotina(2, "Hospital");
+        AdicionarARotina(3, "Library");
         AdicionarARotina(4, "Bakery");
-        AdicionarARotina(5, "Bar");
+        AdicionarARotina(5, "?");
+        AdicionarARotina(6, "Bar");
 
 
         //Nao mexer na linha a baixo
