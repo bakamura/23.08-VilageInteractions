@@ -89,19 +89,31 @@ public class CodeFilo : CharBase
     }
     void Start()
     {
-        //Rota e Rotina do meu personagem.
-        AdicionarARotina(0, "Bakery");
-        AdicionarARotina(1, "TownSquare");
-        AdicionarARotina(2, "Hospital");
-        AdicionarARotina(3, "Library");
-        AdicionarARotina(4, "Bakery");
-        AdicionarARotina(5, "?");
-        AdicionarARotina(6, "Bar");
-
+        //Rota e Rotina do meu personagem, com variação. cada rotina ele vai mudar (50%), ou ele vai para a padaria ou para o hospital e por ai vai.
+        //Momento 0
+        RadnomAddToRoutine(0, 0.5f, "Bakery", "Hospital");
+        //Momento 1
+        RadnomAddToRoutine(1, 0.5f, "TownSquare", "Library");
+        //Momento 2
+        RadnomAddToRoutine(2, 0.5f, "?", "Bar");
+        //Momento 3
+        RadnomAddToRoutine(3, 0.5f, "Hospital", "Bakery");
+        //Momento 4
+        RadnomAddToRoutine(4, 0.5f, "Library", "?");
+        //Momento 5
+        RadnomAddToRoutine(5, 0.5f, "Bar", "TownSquare");
+        //Momento 6
+        RadnomAddToRoutine(6, 0.5f, "Bakery", "Hospital");
 
         //Nao mexer na linha a baixo
         targetPosition = transform.position;
         GameManager.onChangePeriod.AddListener(OnChangePeriod);
+    }
+    public void RadnomAddToRoutine(int period,float chance,string firstPlaceOption, string secondPlaceOption)
+    {
+        //redução da quantidade de if else dentro da variavel de rotina.
+        if (Random.value > chance) AdicionarARotina(period, firstPlaceOption);
+        else AdicionarARotina(period, secondPlaceOption);
     }
     //colocar açoes e personalidades especificas da filo: playful, sleepy, afraid, Angry, Sad e Confused.
     [Header ("--------PersonalityT Values-------"),Space(1)]
@@ -152,7 +164,6 @@ public class CodeFilo : CharBase
                 persona = PersonalityT.Loud;
                 break;
         }
-
         //Variações do meu persoangem perante as raças dos outros personagens.
         switch (charInfo.Race)
         {
