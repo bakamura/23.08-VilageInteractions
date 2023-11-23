@@ -142,10 +142,10 @@ MonoBehaviour:
   persona: 2
   _movmentSpeed: 10
   _distanceFromTargetPlaceTolerance: 0.5
-  _maxActionsPossiblePerUpdate: 1
+  _maxActionsPossiblePerUpdate: 4
   _customRadomizerRule:
-    RandomizerRule: 0
-    Weight: 0
+    RandomizerRule: 1
+    Weight: 1
   _newPlacesPrefabs:
   - Prefab: {fileID: 276695886863335556, guid: 0c6d0f3ee54f9c54dbae0c00225f6ba9, type: 3}
     Name: Boate

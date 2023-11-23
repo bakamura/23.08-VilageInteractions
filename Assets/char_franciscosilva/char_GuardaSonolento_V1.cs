@@ -53,21 +53,21 @@ public class char_GuardaSonolento_V1 : CharBase
             switch (collision.gameObject.name)
             {
                 case "TownSquare":
-                    tired += 1;
+                    tired += 0.5f;
                     break;
                 case "Bakery":
                     break;
                 case "Bar":
-                    tired -= 1;
-                    humor -= 1;
+                    tired -= 0.5f;
+                    humor -= 0.5f;
                     break;
                 case "Library":
-                    tired += 1;
-                    humor += 1;
+                    tired += 0.5f;
+                    humor += 0.5f;
                     break;
                 case "Hospital":
-                    tired += 1;
-                    humor -= 1;
+                    tired += 0.5f;
+                    humor -= 0.5f;
                     break;
                 case "?":
                     break;
@@ -98,26 +98,26 @@ public class char_GuardaSonolento_V1 : CharBase
         switch(charInfo.Persona)
         {
             case PersonalityT.Shy:
-            humor += 1;
-            tired += 1;
+            humor += 0.5f;
+            tired += 0.5f;
             break;
 
             case PersonalityT.Kind:
-            humor += 1;
-            tired -= 1;
+            humor += 0.5f;
+            tired -= 0.5f;
             break;
 
             case PersonalityT.Sadistic:
-            humor -= 1;
-            tired += 1;
+            humor -= 0.5f;
+            tired += 0.5f;
             persona = PersonalityT.Grumpy;
             break;
 
             case PersonalityT.Loud:
-            humor -= 2;
-            tired -= 1;
+            humor -= 1;
+            tired -= 0.5f;
             persona = PersonalityT.Grumpy;
-            targetPosition = GameObject.Find("Library").transform.position;
+            //targetPosition = GameObject.Find("Library").transform.position;
             break;
             //se encontrar com algm Loud, o guarda tentará fugir em direção à biblioteca.
         }

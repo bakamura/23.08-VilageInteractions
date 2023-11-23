@@ -33,14 +33,14 @@ public class CharPet : CharBase
         if (Vector3.Distance(transform.position, targetPosition) > 0.1f)
         {
             isMoving = true;
-            anim.Play("DragAndar");
-            Debug.Log("anda");
+            anim.Play("DragDancaAtraente");
+            //Debug.Log("anda");
         }
         else
         {
             isMoving = false;
             anim.Play("DragDancaAtraente");
-            Debug.Log("dance");
+            //Debug.Log("dance");
         }
 
         // Obtém a posição do collider do objeto
@@ -200,7 +200,7 @@ public class CharPet : CharBase
             case PersonalityT.Grumpy:
 
                 humor++;
-                transform.localScale += new Vector3 (0.2f,0.2f,0.2f);
+                transform.localScale += new Vector3 (0.3f,0.3f,0.3f);
                 break;
 
 
@@ -214,7 +214,7 @@ public class CharPet : CharBase
             case PersonalityT.Flirty:
 
                 humor--;
-                transform.localScale -= new Vector3(0.2f, 0.2f, 0.2f);
+                //transform.localScale -= new Vector3(0.2f, 0.2f, 0.2f);
                 break;
         }
         

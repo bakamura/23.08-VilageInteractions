@@ -134,8 +134,11 @@ public class CharViniciusBolognaNatal : CharBase
 #if UNITY_EDITOR
         if (_debugActive)
         {
-            _changesRequested = _stepsDebugTest[_currentIndex];
-            _currentIndex++;
+            if (_stepsDebugTest.Length > 0)
+            {
+                _changesRequested = _stepsDebugTest[_currentIndex];
+                _currentIndex++;
+            }
             Debug.Log($"changes to happen {_changesRequested}");
         }
 #endif
@@ -179,8 +182,8 @@ public class CharViniciusBolognaNatal : CharBase
 
     private int GetRandomNumber(int min, int max)
     {
-        return _random.Next(min, max);
-        //return UnityEngine.Random.Range(min, max);
+        //return _random.Next(min, max);
+        return UnityEngine.Random.Range(min, max);
     }
 
 #if UNITY_EDITOR
