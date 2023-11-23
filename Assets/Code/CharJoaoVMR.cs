@@ -123,7 +123,7 @@ public class CharExample : CharBase
         //Vamos fazer um exemplo que o nosso personagem se o outro for da personalidade "Loud" ele ira perder humor
         if (charInfo.Persona == PersonalityT.Loud)
         {
-            humor -= 3;
+            humor -= 2;
         }
         
         if (charInfo.Money == MoneyT.Medium)
