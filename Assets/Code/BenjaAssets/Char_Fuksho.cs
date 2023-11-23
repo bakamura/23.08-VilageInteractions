@@ -47,6 +47,11 @@ public class Char_Fuksho : CharBase
             //    humor+=1;
             //    persona=PersonalityT.Loud;  
             //}
+            //if (collision.TryGetComponent<Char_Icognito>(out Char_Icognito Naka))
+            //{
+            //    humor-=2;
+            //    persona=PersonalityT.Loud;  
+            //}
             //if (collision.TryGetComponent<player>(out Player player))
             //{
             //    humor+=1;
@@ -81,7 +86,7 @@ public class Char_Fuksho : CharBase
                     //Caso o npc estiver no bar, ele ficara pobre e tera seu humor restaurado ao valor maximo 
                     persona = PersonalityT.Loud;   
                     money = MoneyT.Poor;
-                    humor = 3;
+                    humor += 3;
                     break;
                 case "Library":
                     //Caso o npc estiver na biblioteca o npc ficara timido
@@ -153,7 +158,7 @@ public class Char_Fuksho : CharBase
             humor-=2;
             break;
             case PersonalityT.Shy:
-            humor=1;
+            humor=+1;
             break;
         }
 
