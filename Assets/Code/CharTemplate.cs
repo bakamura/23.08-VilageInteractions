@@ -66,10 +66,6 @@ public class CharTemplate : CharBase
                     break;
                 case "?":
                     break;
-                case "garagem":
-                    break;
-                case "casa":
-                    break;
             }
         }
     }

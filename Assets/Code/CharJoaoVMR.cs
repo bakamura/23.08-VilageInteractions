@@ -75,17 +75,11 @@ public class CharExample : CharBase
                 case "Hospital":
                     break;
                 case "?":
-
-                    break;
-                case "casa":
-
                     break;
 
-                    break;
-                case "garagem":
                     persona = PersonalityT.Loud;
                     money = MoneyT.Medium;
-                    humor = 1;
+                    humor = 2;
 
                     break;
             }
@@ -101,13 +95,12 @@ public class CharExample : CharBase
         //Exemplo de adicionar um local a sua rotina
 
         //Voce devera usar a funcao AdicionarARotina, nela dentro dos () primeiro colocaremos o horario e apos a virgula o local que vamos ir entre ""
-        AdicionarARotina(0, "casa");
         //Nesse caso o jogador esta indo a TownSquare no momento 0
         AdicionarARotina(1, "Bakery");
         //E indo ao hospital no momento 1
-        AdicionarARotina(2, "garagem");
+        AdicionarARotina(3, "TownSquare");
         AdicionarARotina(5, "Bar");
-        AdicionarARotina(6, "casa");
+        AdicionarARotina(6, "?");
         //PS: Um pouco acima tem uma lista de todas localizacoes presentes no mapa
 
 
@@ -130,9 +123,13 @@ public class CharExample : CharBase
         //Vamos fazer um exemplo que o nosso personagem se o outro for da personalidade "Loud" ele ira perder humor
         if (charInfo.Persona == PersonalityT.Loud)
         {
-            humor -= 1;
+            humor -= 3;
         }
-
+        
+        if (charInfo.Money == MoneyT.Medium)
+        {
+            money -= 1;
+        }
     }
 
     public void OnChangePeriod(int periodo)
